@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECOPAC Power and Technology | Powering a Sustainable Future</title>
+<meta name="description" content="ECOPAC Power and Technology — Bangladesh's trusted supplier of transformers, solar systems, diesel generators, switchgear, lightning protection, elevators, HVAC and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #1db954;
+    --green-dark: #15803d;
+    --green-light: #4ade80;
+    --green-glow: rgba(29,185,84,0.18);
+    --bg: #07100d;
+    --bg2: #0b1912;
+    --bg3: #0f2218;
+    --card: #0d1f16;
+    --card2: #102319;
+    --border: rgba(29,185,84,0.18);
+    --white: #f0faf4;
+    --muted: #7aad91;
+    --text: #c8e6d4;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--green-dark); border-radius: 3px; }
+
+  /* ── GRID BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw;
+    height: 70px;
+    background: rgba(7,16,13,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none;
+  }
+  .nav-logo-icon {
+    width: 42px; height: 42px;
+    background: var(--green);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900; font-size: 16px;
+    color: var(--bg);
+    flex-shrink: 0;
+    box-shadow: 0 0 20px rgba(29,185,84,0.5);
+  }
+  .nav-logo-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700; font-size: 18px;
+    color: var(--white);
+    line-height: 1.1;
+  }
+  .nav-logo-text span { color: var(--green); }
+  .nav-logo-sub {
+    font-size: 10px; font-weight: 400;
+    color: var(--muted); letter-spacing: 0.08em;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .nav-links {
+    display: flex; gap: 2px; list-style: none;
+  }
+  .nav-links a {
+    padding: 8px 14px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600; font-size: 14px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+  }
+  .nav-links a:hover { color: var(--green); background: var(--green-glow); }
+
+  .nav-cta {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .btn-primary {
+    padding: 10px 22px;
+    background: var(--green);
+    color: var(--bg);
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700; font-size: 14px;
+    letter-spacing: 0.06em;
+    border: none; border-radius: 8px;
+    cursor: pointer; text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    white-space: nowrap;
+  }
+  .btn-primary:hover {
+    background: var(--green-light);
+    box-shadow: 0 0 24px rgba(29,185,84,0.45);
+    transform: translateY(-1px);
+  }
+
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 2px; background: var(--green); border-radius: 2px; transition: 0.3s; }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 100px 5vw 60px;
+    overflow: hidden;
+  }
+
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .hero-orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(29,185,84,0.22) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    animation: float1 8s ease-in-out infinite;
+  }
+  .hero-orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(21,128,61,0.15) 0%, transparent 70%);
+    bottom: 0; left: 10%;
+    animation: float2 10s ease-in-out infinite;
+  }
+  @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,20px)} }
+  @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-25px)} }
+
+  .hero-content { position: relative; z-index: 2; max-width: 700px; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px;
+    background: rgba(29,185,84,0.1);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
+    color: var(--green-light); text-transform: uppercase;
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s ease 0.1s both;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  .hero-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.6rem, 5.5vw, 4.8rem);
+    line-height: 1.0;
+    color: var(--white);
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s ease 0.2s both;
+  }
+  .hero-title .accent { color: var(--green); }
+  .hero-title .line2 {
+    display: block;
+    background: linear-gradient(90deg, var(--white), var(--green-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-sub {
+    font-size: 17px; line-height: 1.7;
+    color: var(--muted);
+    max-width: 540px;
+    margin-bottom: 40px;
+    font-weight: 300;
+    animation: fadeUp 0.6s ease 0.35s both;
+  }
+
+  .hero-actions {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    animation: fadeUp 0.6s ease 0.5s both;
+  }
+  .btn-outline {
+    padding: 11px 24px;
+    background: transparent;
+    color: var(--green);
+    border: 1.5px solid var(--green);
+    border-radius: 8px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600; font-size: 14px;
+    letter-spacing: 0.06em;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { background: var(--green-glow); box-shadow: 0 0 18px rgba(29,185,84,0.2); }
+
+  .hero-stats {
+    display: flex; gap: 40px; flex-wrap: wrap;
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    animation: fadeUp 0.6s ease 0.65s both;
+  }
+  .stat-item { }
+  .stat-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px; font-weight: 700;
+    color: var(--green);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 12px; color: var(--muted);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .hero-visual {
+    position: absolute; right: 5vw; top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    animation: fadeUp 0.8s ease 0.4s both;
+    opacity: 0.7;
+  }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── SECTION BASE ── */
+  section { position: relative; z-index: 1; padding: 100px 5vw; }
+  .section-tag {
+    display: inline-block;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--green);
+    background: rgba(29,185,84,0.08);
+    border: 1px solid var(--border);
+    padding: 4px 12px; border-radius: 100px;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.9rem, 3.5vw, 3rem);
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .section-title .accent { color: var(--green); }
+  .section-desc {
+    font-size: 16px; color: var(--muted);
+    max-width: 560px; line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── ABOUT ── */
+  #about { background: var(--bg2); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+    margin-top: 60px;
+  }
+  .about-text p {
+    color: var(--muted); line-height: 1.8;
+    font-size: 15px; margin-bottom: 16px;
+    font-weight: 300;
+  }
+  .about-highlights {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; margin-top: 32px;
+  }
+  .highlight-card {
+    padding: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .highlight-card:hover { border-color: var(--green); transform: translateY(-3px); }
+  .highlight-icon { font-size: 26px; margin-bottom: 8px; }
+  .highlight-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700; font-size: 15px;
+    color: var(--white); margin-bottom: 4px;
+  }
+  .highlight-text { font-size: 12px; color: var(--muted); }
+
+  .about-right {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .cert-item {
+    padding: 24px 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    text-align: center;
+    transition: all 0.25s;
+  }
+  .cert-item:hover { border-color: var(--green); background: var(--card2); }
+  .cert-icon { font-size: 32px; margin-bottom: 10px; }
+  .cert-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600; font-size: 13px;
+    color: var(--white);
+  }
+
+  /* ── PRODUCTS ── */
+  #products { background: var(--bg); }
+  .products-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-end; margin-bottom: 48px;
+    flex-wrap: wrap; gap: 20px;
+  }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .product-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .product-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--green-dark), var(--green-light));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .product-card:hover { border-color: rgba(29,185,84,0.4); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+  .product-card:hover::before { transform: scaleX(1); }
+
+  .product-head {
+    padding: 28px 28px 20px;
+    display: flex; align-items: flex-start; gap: 16px;
+  }
+  .product-icon-wrap {
+    width: 54px; height: 54px; flex-shrink: 0;
+    background: rgba(29,185,84,0.1);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    transition: background 0.25s;
+  }
+  .product-card:hover .product-icon-wrap { background: rgba(29,185,84,0.18); }
+  .product-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700; font-size: 19px;
+    color: var(--white); line-height: 1.2;
+  }
+  .product-cat {
+    font-size: 11px; color: var(--green);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .product-body { padding: 0 28px 28px; }
+  .product-desc { font-size: 13.5px; color: var(--muted); line-height: 1.65; margin-bottom: 18px; }
+  .product-specs {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .spec-tag {
+    padding: 4px 10px;
+    background: rgba(29,185,84,0.07);
+    border: 1px solid rgba(29,185,84,0.15);
+    border-radius: 100px;
+    font-size: 11px; color: var(--green-light);
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600; letter-spacing: 0.05em;
+  }
+
+  /* ── BRANDS ── */
+  #brands { background: var(--bg2); }
+  .brands-header { text-align: center; margin-bottom: 56px; }
+  .brands-header .section-desc { margin: 0 auto; }
+  .brands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .brand-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 20px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px;
+    transition: all 0.25s;
+    min-height: 100px;
+  }
+  .brand-card:hover { border-color: var(--green); background: var(--card2); transform: translateY(-3px); }
+  .brand-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700; font-size: 18px;
+    color: var(--white); text-align: center;
+  }
+  .brand-desc { font-size: 11px; color: var(--muted); text-align: center; }
+
+  /* ── SERVICES STRIP ── */
+  #why { background: var(--bg3); }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 24px;
+    margin-top: 56px;
+  }
+  .why-card {
+    padding: 32px 28px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    transition: all 0.25s;
+    position: relative; overflow: hidden;
+  }
+  .why-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .why-card:hover { border-color: rgba(29,185,84,0.3); transform: translateY(-4px); }
+  .why-card:hover::after { opacity: 1; }
+  .why-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px; font-weight: 700;
+    color: var(--green); opacity: 0.5;
+    letter-spacing: 0.15em; margin-bottom: 20px;
+  }
+  .why-icon { font-size: 36px; margin-bottom: 16px; }
+  .why-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700; font-size: 18px;
+    color: var(--white); margin-bottom: 10px;
+  }
+  .why-text { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+
+  /* ── STANDARDS STRIP ── */
+  .standards-bar {
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 5vw;
+    display: flex; align-items: center; gap: 20px;
+    flex-wrap: wrap; justify-content: center;
+    position: relative; z-index: 1;
+  }
+  .standards-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600; font-size: 13px;
+    color: var(--muted); letter-spacing: 0.1em;
+    text-transform: uppercase; margin-right: 12px;
+  }
+  .std-pill {
+    padding: 5px 14px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600; font-size: 13px;
+    color: var(--green-light); letter-spacing: 0.05em;
+    background: rgba(29,185,84,0.06);
+  }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--bg); }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1.2fr;
+    gap: 60px; margin-top: 60px; align-items: start;
+  }
+  .contact-info h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700; font-size: 22px;
+    color: var(--white); margin-bottom: 24px;
+  }
+  .contact-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    margin-bottom: 20px;
+  }
+  .contact-icon-wrap {
+    width: 42px; height: 42px; flex-shrink: 0;
+    background: rgba(29,185,84,0.1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .contact-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .contact-value { font-size: 15px; color: var(--white); font-weight: 500; margin-top: 2px; }
+  .contact-value a { color: var(--green-light); text-decoration: none; }
+  .contact-value a:hover { color: var(--green); }
+
+  .contact-form {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px;
+  }
+  .contact-form h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700; font-size: 22px;
+    color: var(--white); margin-bottom: 28px;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-size: 12px; font-weight: 500;
+    color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 8px;
+    font-family: 'Rajdhani', sans-serif;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: rgba(29,185,84,0.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: var(--white);
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+  }
+  .form-group select option { background: var(--bg2); color: var(--white); }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(29,185,84,0.12);
+  }
+  .form-group textarea { resize: vertical; min-height: 110px; }
+  .form-submit {
+    width: 100%;
+    padding: 14px;
+    background: var(--green);
+    color: var(--bg);
+    border: none; border-radius: 10px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700; font-size: 16px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .form-submit:hover { background: var(--green-light); box-shadow: 0 0 28px rgba(29,185,84,0.4); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 60px 5vw 32px;
+    position: relative; z-index: 1;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px; margin-bottom: 48px;
+  }
+  .footer-brand .nav-logo-text { font-size: 20px; }
+  .footer-tagline {
+    font-size: 13px; color: var(--muted);
+    line-height: 1.6; margin-top: 14px;
+    max-width: 260px;
+  }
+  .footer-social { display: flex; gap: 10px; margin-top: 20px; }
+  .social-btn {
+    width: 36px; height: 36px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; cursor: pointer;
+    transition: all 0.2s; text-decoration: none;
+  }
+  .social-btn:hover { border-color: var(--green); background: var(--green-glow); }
+
+  .footer-col h4 {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700; font-size: 14px;
+    color: var(--white); letter-spacing: 0.08em;
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li {
+    margin-bottom: 10px;
+  }
+  .footer-col ul li a {
+    font-size: 13.5px; color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-col ul li a:hover { color: var(--green-light); }
+
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 28px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-copy { font-size: 12.5px; color: var(--muted); }
+  .footer-accord {
+    font-size: 12px; color: var(--muted);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .accord-badge {
+    padding: 3px 8px;
+    background: rgba(29,185,84,0.1);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600; font-size: 11px;
+    color: var(--green);
+  }
+
+  /* ── MOBILE NAV ── */
+  .mobile-nav {
+    display: none;
+    position: fixed; top: 70px; left: 0; right: 0; z-index: 999;
+    background: rgba(7,16,13,0.97);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 5vw;
+    flex-direction: column; gap: 4px;
+  }
+  .mobile-nav.open { display: flex; }
+  .mobile-nav a {
+    padding: 12px 16px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600; font-size: 16px;
+    color: var(--muted); text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .mobile-nav a:hover { color: var(--green); background: var(--green-glow); }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ── FLOATING HOTLINE ── */
+  .hotline-float {
+    position: fixed; bottom: 28px; right: 24px; z-index: 900;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+  }
+  .hotline-btn {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--green);
+    color: var(--bg);
+    padding: 12px 18px;
+    border-radius: 50px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700; font-size: 14px;
+    text-decoration: none;
+    box-shadow: 0 4px 24px rgba(29,185,84,0.45);
+    transition: all 0.2s;
+    animation: pulse-shadow 2.5s infinite;
+  }
+  @keyframes pulse-shadow {
+    0%,100%{box-shadow:0 4px 24px rgba(29,185,84,0.45)}
+    50%{box-shadow:0 4px 36px rgba(29,185,84,0.7), 0 0 0 8px rgba(29,185,84,0.08)}
+  }
+  .hotline-btn:hover { background: var(--green-light); transform: translateY(-2px); }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:1024px) {
+    .hero-visual { display: none; }
+    .about-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media(max-width:768px) {
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .hero-title { font-size: 2.4rem; }
+    .hero-stats { gap: 24px; }
+    .products-grid { grid-template-columns: 1fr; }
+    .brands-grid { grid-template-columns: repeat(2, 1fr); }
+    .why-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .about-highlights { grid-template-columns: 1fr; }
+    .about-right { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-icon">EP</div>
+    <div>
+      <div class="nav-logo-text"><span>EC</span>PAC</div>
+      <div class="nav-logo-sub">Power and Technology</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#brands">Brands</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="tel:+8801339671631" class="btn-primary">📞 Call Now</a>
+  </div>
+  <div class="hamburger" id="hamBtn" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav" id="mobileNav">
+  <a href="#about" onclick="toggleMenu()">About Us</a>
+  <a href="#products" onclick="toggleMenu()">Products</a>
+  <a href="#brands" onclick="toggleMenu()">Brands</a>
+  <a href="#why" onclick="toggleMenu()">Why Us</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🇧🇩 SREDA Approved &nbsp;·&nbsp; Bangladesh</div>
+    <h1 class="hero-title">
+      <span class="accent">Powering</span> a<br>
+      <span class="line2">Sustainable Future</span>
+    </h1>
+    <p class="hero-sub">
+      Bangladesh's trusted engineering partner for transformers, solar systems, diesel generators, switchgear, lightning protection, elevators & industrial electrical solutions.
+    </p>
+    <div class="hero-actions">
+      <a href="#products" class="btn-primary">⚡ Explore Products</a>
+      <a href="#contact" class="btn-outline">Get a Quote →</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">20+</div>
+        <div class="stat-label">Product Categories</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">2000</div>
+        <div class="stat-label">kVA Generator Range</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">12500</div>
+        <div class="stat-label">KVA Max Transformer</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">8+</div>
+        <div class="stat-label">Global Brands</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STANDARDS BAR -->
+<div class="standards-bar">
+  <span class="standards-label">Standards Compliance</span>
+  <span class="std-pill">IEC 60076</span>
+  <span class="std-pill">BDS 1081</span>
+  <span class="std-pill">ANSI</span>
+  <span class="std-pill">IEC 62271</span>
+  <span class="std-pill">IEC 62305</span>
+  <span class="std-pill">NFPA 780</span>
+  <span class="std-pill">IEC 60529</span>
+  <span class="std-pill">UL 857</span>
+  <span class="std-pill">SREDA</span>
+  <span class="std-pill">ACCORD</span>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-tag">About ECOPAC</div>
+  <h2 class="section-title">Your Complete<br><span class="accent">Power Solutions</span> Partner</h2>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>ECOPAC Power and Technology is a leading supplier and engineering service provider based in Bangladesh, delivering complete power and energy solutions for industrial, commercial, and residential sectors across the country.</p>
+      <p>From high-voltage distribution transformers to SREDA-approved solar systems, from precision diesel generators to intelligent Building Management Systems — we are your single-window partner for all electrical and power infrastructure needs.</p>
+      <p>Our commitment to quality is backed by internationally certified products, a professional engineering team, and partnerships with the world's foremost electrical equipment manufacturers.</p>
+      <div class="about-highlights">
+        <div class="highlight-card reveal reveal-delay-1">
+          <div class="highlight-icon">⚡</div>
+          <div class="highlight-title">Full Electrical Range</div>
+          <div class="highlight-text">From LT panels to 33kV transformers</div>
+        </div>
+        <div class="highlight-card reveal reveal-delay-2">
+          <div class="highlight-icon">☀️</div>
+          <div class="highlight-title">SREDA Approved Solar</div>
+          <div class="highlight-text">On-grid, off-grid & hybrid systems</div>
+        </div>
+        <div class="highlight-card reveal reveal-delay-3">
+          <div class="highlight-icon">🔧</div>
+          <div class="highlight-title">After-Sales Support</div>
+          <div class="highlight-text">Spare parts & AMC services</div>
+        </div>
+        <div class="highlight-card reveal reveal-delay-4">
+          <div class="highlight-icon">🌏</div>
+          <div class="highlight-title">Global Brands</div>
+          <div class="highlight-text">ABB, Siemens, Schneider & more</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-right reveal">
+      <div class="cert-item">
+        <div class="cert-icon">🏭</div>
+        <div class="cert-name">Testing Laboratory</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">✅</div>
+        <div class="cert-name">BII Quality Control</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">📋</div>
+        <div class="cert-name">ACCORD Alliance</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🇧🇩</div>
+        <div class="cert-name">Bangladesh SREDA</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">⚙️</div>
+        <div class="cert-name">IEC / BDS Certified</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🌱</div>
+        <div class="cert-name">Green Energy Focus</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="products-header">
+    <div>
+      <div class="section-tag">Product Portfolio</div>
+      <h2 class="section-title">Complete Range of<br><span class="accent">Power Equipment</span></h2>
+    </div>
+    <p class="section-desc">End-to-end electrical and power solutions — from generation to distribution, protection to management.</p>
+  </div>
+  <div class="products-grid">
+
+    <div class="product-card reveal">
+      <div class="product-head">
+        <div class="product-icon-wrap">🔌</div>
+        <div>
+          <div class="product-cat">Distribution & Power</div>
+          <div class="product-title">Transformers</div>
+        </div>
+      </div>
+      <div class="product-body">
+        <p class="product-desc">Complete range of distribution, power, and dry-type transformers for utility, industrial & commercial applications. All routine & type tests performed per IEC-76, BDS 1081, ANSI, AEC & BSTI standards.</p>
+        <div class="product-specs">
+          <span class="spec-tag">100 KVA – 12,500 KVA</span>
+          <span class="spec-tag">33kV / 11kV</span>
+          <span class="spec-tag">OLTC / NLTC</span>
+          <span class="spec-tag">Oil & Dry-Type</span>
+          <span class="spec-tag">Dyn11</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal reveal-delay-1">
+      <div class="product-head">
+        <div class="product-icon-wrap">🗄️</div>
+        <div>
+          <div class="product-cat">Switchgear & Panels</div>
+          <div class="product-title">HT, LT Switchgear & PFI Panel</div>
+        </div>
+      </div>
+      <div class="product-body">
+        <p class="product-desc">CPT Brand HT and LT switchgear panels for safe power distribution and power factor improvement. Built to IEC 62271, IEC 61439, and IEC 60831 standards.</p>
+        <div class="product-specs">
+          <span class="spec-tag">HT Panel</span>
+          <span class="spec-tag">LT Panel</span>
+          <span class="spec-tag">PFI Panel</span>
+          <span class="spec-tag">MDB / SDB / DB</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal reveal-delay-2">
+      <div class="product-head">
+        <div class="product-icon-wrap">⚙️</div>
+        <div>
+          <div class="product-cat">Backup Power</div>
+          <div class="product-title">Diesel Generators</div>
+        </div>
+      </div>
+      <div class="product-body">
+        <p class="product-desc">Reliable power solutions for industrial, commercial, and residential sectors. Ready stock from 20–500 kVA. Custom configurations up to 2,000 kVA available.</p>
+        <div class="product-specs">
+          <span class="spec-tag">20 – 2,000 kVA</span>
+          <span class="spec-tag">Perkins</span>
+          <span class="spec-tag">Cummins</span>
+          <span class="spec-tag">Ricardo</span>
+          <span class="spec-tag">Stamford</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal">
+      <div class="product-head">
+        <div class="product-icon-wrap">☀️</div>
+        <div>
+          <div class="product-cat">Renewable Energy</div>
+          <div class="product-title">Solar Power Systems</div>
+        </div>
+      </div>
+      <div class="product-body">
+        <p class="product-desc">SREDA-approved complete solar solutions — on-grid, off-grid, hybrid, solar street lights, and solar irrigation systems. Top-tier panels, inverters, and accessories.</p>
+        <div class="product-specs">
+          <span class="spec-tag">On-Grid</span>
+          <span class="spec-tag">Off-Grid</span>
+          <span class="spec-tag">Hybrid</span>
+          <span class="spec-tag">Growatt / Solis</span>
+          <span class="spec-tag">JA / Longi / Jinko</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal reveal-delay-1">
+      <div class="product-head">
+        <div class="product-icon-wrap">⛈️</div>
+        <div>
+          <div class="product-cat">Safety Systems</div>
+          <div class="product-title">Lightning Protection (LPS)</div>
+        </div>
+      </div>
+      <div class="product-body">
+        <p class="product-desc">Conventional and ESE/Digital LPS solutions. Direct lightning protection devices, surge protection, and earthing systems for industrial, commercial & residential use.</p>
+        <div class="product-specs">
+          <span class="spec-tag">ABB OPR</span>
+          <span class="spec-tag">Onay Paratoner</span>
+          <span class="spec-tag">Up to 214m range</span>
+          <span class="spec-tag">IEC 62305</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal reveal-delay-2">
+      <div class="product-head">
+        <div class="product-icon-wrap">🛗</div>
+        <div>
+          <div class="product-cat">Vertical Transport</div>
+          <div class="product-title">Lift & Elevator</div>
+        </div>
+      </div>
+      <div class="product-body">
+        <p class="product-desc">Safe and comfortable passenger elevators designed for accessibility. Available for 6, 8, 10, and 13-person capacities with speeds up to 4.0 m/s.</p>
+        <div class="product-specs">
+          <span class="spec-tag">SIGMA</span>
+          <span class="spec-tag">FUJI Elevators</span>
+          <span class="spec-tag">ACL</span>
+          <span class="spec-tag">450–1050 kg</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal">
+      <div class="product-head">
+        <div class="product-icon-wrap">❄️</div>
+        <div>
+          <div class="product-cat">Climate Control</div>
+          <div class="product-title">HVAC (VRF System)</div>
+        </div>
+      </div>
+      <div class="product-body">
+        <p class="product-desc">Variable Refrigerant Flow (VRF) systems with precise temperature control and energy efficiency. One outdoor unit connected to multiple indoor units for zoned climate control.</p>
+        <div class="product-specs">
+          <span class="spec-tag">Dunham-Bush</span>
+          <span class="spec-tag">Samsung</span>
+          <span class="spec-tag">Cassette & Duct</span>
+          <span class="spec-tag">Multizone</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal reveal-delay-1">
+      <div class="product-head">
+        <div class="product-icon-wrap">📡</div>
+        <div>
+          <div class="product-cat">Power Distribution</div>
+          <div class="product-title">Busbar Trunking (BBT)</div>
+        </div>
+      </div>
+      <div class="product-body">
+        <p class="product-desc">Light-weight, low-impedance busduct systems with copper or aluminium bars. Indoor and outdoor versions with fire retardant protection per IEC 60331.</p>
+        <div class="product-specs">
+          <span class="spec-tag">25A – 6,300A</span>
+          <span class="spec-tag">Up to 1000V</span>
+          <span class="spec-tag">MEGADUCT</span>
+          <span class="spec-tag">EAE</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal reveal-delay-2">
+      <div class="product-head">
+        <div class="product-icon-wrap">🏢</div>
+        <div>
+          <div class="product-cat">Smart Buildings</div>
+          <div class="product-title">BMS & IT Solutions</div>
+        </div>
+      </div>
+      <div class="product-body">
+        <p class="product-desc">Intelligent Building Management Systems for centralized HVAC, lighting, energy monitoring, fire alarm, CCTV, and access control integration.</p>
+        <div class="product-specs">
+          <span class="spec-tag">HVAC Control</span>
+          <span class="spec-tag">Energy Monitoring</span>
+          <span class="spec-tag">Access Control</span>
+          <span class="spec-tag">CCTV</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal">
+      <div class="product-head">
+        <div class="product-icon-wrap">🔋</div>
+        <div>
+          <div class="product-cat">Cable Management</div>
+          <div class="product-title">Cable Tray Systems</div>
+        </div>
+      </div>
+      <div class="product-body">
+        <p class="product-desc">Structured cable tray systems — perforated, ladder, wire mesh, and solid-bottom types with a full range of connectors and fittings for any routing requirement.</p>
+        <div class="product-specs">
+          <span class="spec-tag">Perforated</span>
+          <span class="spec-tag">Ladder Type</span>
+          <span class="spec-tag">Wire Mesh</span>
+          <span class="spec-tag">20+ Fittings</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal reveal-delay-1">
+      <div class="product-head">
+        <div class="product-icon-wrap">🔩</div>
+        <div>
+          <div class="product-cat">Protection & Control</div>
+          <div class="product-title">Breakers & Protection Devices</div>
+        </div>
+      </div>
+      <div class="product-body">
+        <p class="product-desc">Complete range of circuit protection — ACB, VCB, LBS, MCCB, MCB, RCBO, OLR, AVR, ARD, CT & PT, ATS, isolators, and capacitor banks for power factor correction.</p>
+        <div class="product-specs">
+          <span class="spec-tag">ACB / VCB</span>
+          <span class="spec-tag">MCCB / MCB</span>
+          <span class="spec-tag">AVR / ARD</span>
+          <span class="spec-tag">CT & PT</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card reveal reveal-delay-2">
+      <div class="product-head">
+        <div class="product-icon-wrap">💡</div>
+        <div>
+          <div class="product-cat">Lighting</div>
+          <div class="product-title">Commercial & Industrial LED</div>
+        </div>
+      </div>
+      <div class="product-body">
+        <p class="product-desc">Full LED lighting range — high bay, flood lights, panel lights, street lights, explosion-proof, track lights, and emergency exit lights for all environments.</p>
+        <div class="product-specs">
+          <span class="spec-tag">High Bay</span>
+          <span class="spec-tag">Flood Light</span>
+          <span class="spec-tag">IP65 Rated</span>
+          <span class="spec-tag">Emergency Exit</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BRANDS -->
+<section id="brands">
+  <div class="brands-header reveal">
+    <div class="section-tag">Our Partners</div>
+    <h2 class="section-title">Trusted <span class="accent">Global Brands</span></h2>
+    <p class="section-desc">We partner with the world's leading electrical equipment manufacturers to bring you premium-quality, internationally certified products.</p>
+  </div>
+  <div class="brands-grid">
+    <div class="brand-card reveal">
+      <div class="brand-name" style="color:#e63329">ABB</div>
+      <div class="brand-desc">Power & Automation</div>
+    </div>
+    <div class="brand-card reveal reveal-delay-1">
+      <div class="brand-name" style="color:#009999">SIEMENS</div>
+      <div class="brand-desc">Electrical Systems</div>
+    </div>
+    <div class="brand-card reveal reveal-delay-2">
+      <div class="brand-name" style="color:#3dcd58">Schneider</div>
+      <div class="brand-desc">Electric Solutions</div>
+    </div>
+    <div class="brand-card reveal">
+      <div class="brand-name" style="color:#e63329">CHINT</div>
+      <div class="brand-desc">Chint Electric</div>
+    </div>
+    <div class="brand-card reveal reveal-delay-1">
+      <div class="brand-name">⚙️ Perkins</div>
+      <div class="brand-desc">Diesel Generators</div>
+    </div>
+    <div class="brand-card reveal reveal-delay-2">
+      <div class="brand-name">Ricardo</div>
+      <div class="brand-desc">Engine Technology</div>
+    </div>
+    <div class="brand-card reveal">
+      <div class="brand-name" style="color:#00a0e3">HYUNDAI</div>
+      <div class="brand-desc">Power Systems</div>
+    </div>
+    <div class="brand-card reveal reveal-delay-1">
+      <div class="brand-name">LS</div>
+      <div class="brand-desc">Electrical Equipment</div>
+    </div>
+    <div class="brand-card reveal reveal-delay-2">
+      <div class="brand-name" style="color:#ff6c00">Growatt</div>
+      <div class="brand-desc">Solar Inverters</div>
+    </div>
+    <div class="brand-card reveal">
+      <div class="brand-name" style="color:#005baa">Solis</div>
+      <div class="brand-desc">Solar Inverters</div>
+    </div>
+    <div class="brand-card reveal reveal-delay-1">
+      <div class="brand-name">JA Solar</div>
+      <div class="brand-desc">Solar Panels</div>
+    </div>
+    <div class="brand-card reveal reveal-delay-2">
+      <div class="brand-name" style="color:#e63329">Jinko</div>
+      <div class="brand-desc">Solar Modules</div>
+    </div>
+    <div class="brand-card reveal">
+      <div class="brand-name" style="color:#00a651">LONGI</div>
+      <div class="brand-desc">Solar Technology</div>
+    </div>
+    <div class="brand-card reveal reveal-delay-1">
+      <div class="brand-name">SIGMA</div>
+      <div class="brand-desc">Elevators</div>
+    </div>
+    <div class="brand-card reveal reveal-delay-2">
+      <div class="brand-name" style="color:#e63329">FUJI</div>
+      <div class="brand-desc">Elevator Systems</div>
+    </div>
+    <div class="brand-card reveal">
+      <div class="brand-name" style="color:#005baa">Samsung</div>
+      <div class="brand-desc">HVAC / VRF</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why">
+  <div class="section-tag">Why Choose Us</div>
+  <h2 class="section-title">The <span class="accent">ECOPAC</span> Advantage</h2>
+  <p class="section-desc">From product supply to engineering consultation, we deliver end-to-end value on every project.</p>
+  <div class="why-grid">
+    <div class="why-card reveal">
+      <div class="why-num">01</div>
+      <div class="why-icon">🏆</div>
+      <div class="why-title">International Brands</div>
+      <div class="why-text">We stock and supply products from globally recognized brands — ABB, Siemens, Schneider, Perkins, Cummins, and more — ensuring you always get certified, quality equipment.</div>
+    </div>
+    <div class="why-card reveal reveal-delay-1">
+      <div class="why-num">02</div>
+      <div class="why-icon">⚡</div>
+      <div class="why-title">Ready Stock Availability</div>
+      <div class="why-text">Diesel generators from 20–500 kVA and a wide range of electrical accessories are available from ready stock, minimizing your project downtime.</div>
+    </div>
+    <div class="why-card reveal reveal-delay-2">
+      <div class="why-num">03</div>
+      <div class="why-icon">🔬</div>
+      <div class="why-title">In-House Testing Lab</div>
+      <div class="why-text">All transformers undergo rigorous routine and type testing at our well-equipped testing laboratory as per IEC, BDS, ANSI, and BSTI standards before delivery.</div>
+    </div>
+    <div class="why-card reveal">
+      <div class="why-num">04</div>
+      <div class="why-icon">☀️</div>
+      <div class="why-title">SREDA Approved Solar</div>
+      <div class="why-text">Our solar accessories and systems carry SREDA (Sustainable and Renewable Energy Development Authority) approval, making us a trusted partner for Bangladesh's green energy transition.</div>
+    </div>
+    <div class="why-card reveal reveal-delay-1">
+      <div class="why-num">05</div>
+      <div class="why-icon">🔧</div>
+      <div class="why-title">Complete After-Sales</div>
+      <div class="why-text">From generator spare parts to elevator maintenance, we provide comprehensive after-sales support including AMC (Annual Maintenance Contracts) to keep your systems running.</div>
+    </div>
+    <div class="why-card reveal reveal-delay-2">
+      <div class="why-num">06</div>
+      <div class="why-icon">🏗️</div>
+      <div class="why-title">One-Stop Solution</div>
+      <div class="why-text">From power generation to distribution, protection, solar, HVAC, elevators, and BMS — ECOPAC is your single window for all building and industrial electrical needs.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-tag">Get In Touch</div>
+  <h2 class="section-title">Request a <span class="accent">Quote</span> or<br>Product Enquiry</h2>
+  <div class="contact-grid">
+    <div>
+      <div class="contact-info">
+        <h3>Contact Information</h3>
+        <div class="contact-item">
+          <div class="contact-icon-wrap">📞</div>
+          <div>
+            <div class="contact-label">Hotline</div>
+            <div class="contact-value"><a href="tel:+8801339671631">+880 1339-671631</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon-wrap">📱</div>
+          <div>
+            <div class="contact-label">Mobile</div>
+            <div class="contact-value"><a href="tel:+8801851114498">+880 1851-114498</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon-wrap">✉️</div>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-value"><a href="mailto:info@ecopacpowertech.com">info@ecopacpowertech.com</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon-wrap">🌐</div>
+          <div>
+            <div class="contact-label">Website</div>
+            <div class="contact-value"><a href="https://www.ecopacpowertech.com" target="_blank">www.ecopacpowertech.com</a></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:36px">
+        <h3 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;color:var(--white);margin-bottom:16px">Business Hours</h3>
+        <div style="font-size:14px;color:var(--muted);line-height:2">
+          <div>Saturday – Thursday: <span style="color:var(--green-light)">9:00 AM – 6:00 PM</span></div>
+          <div>Friday: <span style="color:var(--muted)">Closed</span></div>
+          <div style="margin-top:10px;color:var(--green)">🚨 Emergency support available 24/7</div>
+        </div>
+      </div>
+
+      <div style="margin-top:36px;padding:24px;background:var(--card);border:1px solid var(--border);border-radius:14px">
+        <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;color:var(--white);margin-bottom:12px;letter-spacing:0.08em;text-transform:uppercase">Product Categories</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span class="spec-tag">Transformers</span>
+          <span class="spec-tag">Generators</span>
+          <span class="spec-tag">Solar Systems</span>
+          <span class="spec-tag">Switchgear</span>
+          <span class="spec-tag">Elevators</span>
+          <span class="spec-tag">LPS</span>
+          <span class="spec-tag">HVAC</span>
+          <span class="spec-tag">BMS</span>
+          <span class="spec-tag">Cable Tray</span>
+          <span class="spec-tag">LED Lights</span>
+          <span class="spec-tag">Busbar</span>
+          <span class="spec-tag">Breakers</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form reveal">
+      <h3>Send an Enquiry</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label>Company</label>
+          <input type="text" placeholder="Company name">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Phone *</label>
+          <input type="tel" placeholder="+880 ...">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="your@email.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Product / Service Needed</label>
+        <select>
+          <option value="">Select a category...</option>
+          <option>Transformer (Distribution / Power / Dry-Type)</option>
+          <option>HT/LT Switchgear & PFI Panel</option>
+          <option>Diesel Generator</option>
+          <option>Solar Power System</option>
+          <option>Lightning Protection System (LPS)</option>
+          <option>Lift / Elevator</option>
+          <option>HVAC (VRF System)</option>
+          <option>Busbar Trunking (BBT)</option>
+          <option>Cable Tray</option>
+          <option>Building Management System (BMS)</option>
+          <option>Circuit Breakers & Protection</option>
+          <option>LED Lighting</option>
+          <option>Other Products</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Project Details / Message</label>
+        <textarea placeholder="Describe your requirement — capacity, location, application, timeline..."></textarea>
+      </div>
+      <button class="form-submit" onclick="handleSubmit(this)">⚡ Send Enquiry</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo">
+        <div class="nav-logo-icon">EP</div>
+        <div>
+          <div class="nav-logo-text"><span>EC</span>PAC</div>
+          <div class="nav-logo-sub">Power and Technology</div>
+        </div>
+      </div>
+      <p class="footer-tagline">Powering a Sustainable Future — Bangladesh's trusted partner for complete electrical, solar, and power infrastructure solutions.</p>
+      <div class="footer-social">
+        <a class="social-btn" href="mailto:info@ecopacpowertech.com" title="Email">✉️</a>
+        <a class="social-btn" href="tel:+8801339671631" title="Phone">📞</a>
+        <a class="social-btn" href="https://www.ecopacpowertech.com" target="_blank" title="Website">🌐</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Products</h4>
+      <ul>
+        <li><a href="#products">Transformers</a></li>
+        <li><a href="#products">Switchgear & Panels</a></li>
+        <li><a href="#products">Diesel Generators</a></li>
+        <li><a href="#products">Solar Systems</a></li>
+        <li><a href="#products">Lightning Protection</a></li>
+        <li><a href="#products">Lift & Elevator</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Solutions</h4>
+      <ul>
+        <li><a href="#products">HVAC / VRF</a></li>
+        <li><a href="#products">Busbar Trunking</a></li>
+        <li><a href="#products">Cable Tray</a></li>
+        <li><a href="#products">BMS & IT</a></li>
+        <li><a href="#products">LED Lighting</a></li>
+        <li><a href="#products">Safety Products</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:+8801339671631">+880 1339-671631</a></li>
+        <li><a href="tel:+8801851114498">+880 1851-114498</a></li>
+        <li><a href="mailto:info@ecopacpowertech.com">info@ecopacpowertech.com</a></li>
+        <li><a href="https://www.ecopacpowertech.com" target="_blank">ecopacpowertech.com</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 ECOPAC Power and Technology. All rights reserved.</div>
+    <div class="footer-accord">
+      <span class="accord-badge">ACCORD</span>
+      <span>Alliance Member</span>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING HOTLINE -->
+<div class="hotline-float">
+  <a href="tel:+8801339671631" class="hotline-btn">
+    <span>📞</span>
+    <span>+880 1339-671631</span>
+  </a>
+</div>
+
+<script>
+  // Mobile menu toggle
+  function toggleMenu() {
+    const m = document.getElementById('mobileNav');
+    m.classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Navbar shadow on scroll
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    nav.style.boxShadow = window.scrollY > 20 ? '0 4px 30px rgba(0,0,0,0.4)' : 'none';
+  });
+
+  // Form submission
+  function handleSubmit(btn) {
+    btn.textContent = '✅ Enquiry Sent!';
+    btn.style.background = 'var(--green-dark)';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = '⚡ Send Enquiry';
+      btn.style.background = 'var(--green)';
+      btn.disabled = false;
+    }, 3000);
+  }
+
+  // Animate counters
+  function animateCounters() {
+    const counters = document.querySelectorAll('.stat-num');
+    counters.forEach(c => {
+      const text = c.textContent;
+      const num = parseInt(text);
+      if (isNaN(num)) return;
+      const suffix = text.replace(/[0-9]/g,'');
+      let current = 0;
+      const step = num / 40;
+      const timer = setInterval(() => {
+        current = Math.min(current + step, num);
+        c.textContent = Math.round(current) + suffix;
+        if (current >= num) clearInterval(timer);
+      }, 30);
+    });
+  }
+  const heroObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) { animateCounters(); heroObserver.disconnect(); }
+  }, { threshold: 0.5 });
+  heroObserver.observe(document.querySelector('.hero-stats'));
+
+  // Close mobile nav on outside click
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('nav') && !e.target.closest('#mobileNav')) {
+      document.getElementById('mobileNav').classList.remove('open');
+    }
+  });
+</script>
+</body>
+</html>
