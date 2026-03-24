@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('employee_roles', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
+            $table->string('role_name'); // High level role like 'Admin', 'Engineer', 'Technician'
+            $table->json('permissions')->nullable(); // Specific permissions if needed
+            $table->timestamps();
+        });
+        
+        // Add designation_id to employees if missing (it was in the upgrade migration but let's double check model)
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('employee_roles');
+    }
+};
