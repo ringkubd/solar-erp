@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import api from "@/lib/api";
-import { Loader2, Calculator, CheckCircle2, AlertCircle } from "lucide-react";
+import { Loader2, Calculator, CheckCircle2, CircleAlert } from "lucide-react";
 
 export default function TrialBalancePage() {
   const [data, setData] = useState<any>(null);
@@ -35,7 +35,7 @@ export default function TrialBalancePage() {
         <div className="flex items-center gap-2">
           <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">As of</label>
           <input type="date" value={asOf} onChange={e => setAsOf(e.target.value)}
-            className="h-10 border rounded-lg px-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"/>
+            className="h-10 border rounded-lg px-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
         </div>
       </div>
 
@@ -50,7 +50,7 @@ export default function TrialBalancePage() {
           </thead>
           <tbody className="divide-y">
             {loading ? (
-              <tr><td colSpan={3} className="text-center py-16"><Loader2 className="w-6 h-6 animate-spin mx-auto text-emerald-600"/></td></tr>
+              <tr><td colSpan={3} className="text-center py-16"><Loader2 className="w-6 h-6 animate-spin mx-auto text-emerald-600" /></td></tr>
             ) : data?.rows.map((row: any) => (
               <tr key={row.code} className="hover:bg-slate-50 transition-colors">
                 <td className="px-6 py-4">
@@ -80,12 +80,12 @@ export default function TrialBalancePage() {
 
       {!loading && data && (
         <div className={`p-6 rounded-2xl border flex items-center gap-4 ${data.totals.balanced ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-red-50 border-red-200 text-red-800'}`}>
-          {data.totals.balanced ? <CheckCircle2 className="w-6 h-6"/> : <AlertCircle className="w-6 h-6"/>}
+          {data.totals.balanced ? <CheckCircle2 className="w-6 h-6" /> : <CircleAlert className="w-6 h-6" />}
           <div>
             <div className="font-black uppercase tracking-widest text-[10px] mb-1">Status</div>
             <div className="text-lg font-bold">
-              {data.totals.balanced 
-                ? 'Your Trial Balance is currently balanced.' 
+              {data.totals.balanced
+                ? 'Your Trial Balance is currently balanced.'
                 : `Trial Balance is OUT OF BALANCE by ৳${Math.abs(data.totals.debit - data.totals.credit).toLocaleString()}.`}
             </div>
           </div>
