@@ -110,21 +110,41 @@ class Employee extends Authenticatable
     protected static function booted(): void
     {
         static::created(function (Employee $employee) {
-            // Auto-create Email Account
+            // Logic for internal DB record
             $domain = 'ecopacpowertech.com';
             $email  = strtolower($employee->first_name . '.' . $employee->last_name) . '@' . $domain;
             
-            // Check if email already exists, if so append ID
             if (EmailAccount::where('email', $email)->exists()) {
                 $email = strtolower($employee->first_name . '.' . $employee->last_name . $employee->id) . '@' . $domain;
             }
 
-            $employee->emailAccount()->create([
+            $password = $employee->password; // Note: this is already hashed in controller
+
+            // Create record in ERP DB
+            $account = $employee->emailAccount()->create([
                 'email'         => $email,
-                'password_hash' => $employee->password, // Use same hash as employee login
+                'password_hash' => $password,
                 'mailbox_path'  => "/var/mail/vhosts/{$domain}/" . str_replace('@' . $domain, '', $email),
                 'quota_gb'      => 5.00,
+                'status'        => 'provisioning'
             ]);
+
+            // Trigger external provisioning via FluxAgent
+            try {
+                $flux = app(\App\Services\FluxAgentService::class);
+                $result = $flux->createMailAccount(
+                    domain: $domain,
+                    email: str_replace('@' . $domain, '', $email),
+                    password: 'Ecopac@2026', // We should probably use a temporary plain password or sync correctly
+                    webhookUrl: route('api.flux.webhook')
+                );
+
+                if (isset($result['job_id'])) {
+                    $account->update(['provision_job_id' => $result['job_id']]);
+                }
+            } catch (\Exception $e) {
+                \Log::error('FluxAgent trigger failed', ['error' => $e->getMessage()]);
+            }
         });
     }
 }

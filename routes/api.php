@@ -173,6 +173,10 @@ Route::prefix('v1')->group(function() {
             Route::put('accounts/{id}', [\App\Http\Controllers\Email\EmailAccountController::class, 'update']);
             Route::post('sync', [\App\Http\Controllers\Email\EmailAccountController::class, 'sync']);
         });
+
+        // FluxAgent Automated Provisioning Webhook
+        Route::post('/flux/webhook', [\App\Http\Controllers\Email\FluxWebhookController::class, 'handle'])
+            ->name('api.flux.webhook');
     });
 
     // Employee Portal Routes
