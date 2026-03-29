@@ -15,6 +15,8 @@ export default function NewClientPage() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     company_name: "",
+    email: "",
+    password: "",
     trade_license: "",
     tax_id: "",
     district: "",
@@ -57,6 +59,16 @@ export default function NewClientPage() {
           <div className="space-y-2 md:col-span-2">
             <Label htmlFor="company_name">Company Name *</Label>
             <Input id="company_name" name="company_name" required value={formData.company_name} onChange={handleChange} placeholder="EcoPac Power and Technology Ltd." />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email">Portal Email *</Label>
+            <Input id="email" name="email" type="email" required value={formData.email} onChange={handleChange} placeholder="client@example.com" />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="password">Initial Password *</Label>
+            <Input id="password" name="password" type="password" required value={formData.password} onChange={handleChange} placeholder="••••••••" />
           </div>
           
           <div className="space-y-2">

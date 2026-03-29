@@ -82,6 +82,11 @@ export default function ReceiptDetailPage() {
         <div className="bg-emerald-600 px-6 py-5 text-white">
           <div className="text-xs font-bold uppercase tracking-widest opacity-70 mb-1">Amount Received</div>
           <div className="text-4xl font-black font-mono">৳{Number(receipt.amount).toLocaleString()}</div>
+          {Number(receipt.discount_amount) > 0 && (
+            <div className="text-[10px] font-bold mt-1 bg-white/20 inline-block px-2 py-0.5 rounded">
+              + ৳{Number(receipt.discount_amount).toLocaleString()} SETTLEMENT DISCOUNT
+            </div>
+          )}
           <div className="text-xs opacity-70 mt-1">Bangladeshi Taka</div>
         </div>
 

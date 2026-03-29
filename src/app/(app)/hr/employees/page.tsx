@@ -24,9 +24,10 @@ export default function EmployeeListPage() {
     phone: '',
     role: '',
     salary: '',
+    password: '',
     join_date: new Date().toISOString().slice(0, 10),
     address: ''
-  });
+});
 
   const fetchHR = async () => {
     setLoading(true);
@@ -227,11 +228,17 @@ export default function EmployeeListPage() {
                       <input placeholder="e.g. Solar Technician" required value={form.role} onChange={e=>setForm({...form, role: e.target.value})}
                          className="w-full h-11 border-2 rounded-xl px-4 text-sm focus:border-emerald-500 outline-none"/>
                    </div>
-                   <div className="col-span-1">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Joining Date</label>
-                      <input type="date" required value={form.join_date} onChange={e=>setForm({...form, join_date: e.target.value})}
-                         className="w-full h-11 border-2 rounded-xl px-4 text-sm focus:border-emerald-500 outline-none"/>
-                   </div>
+                    <div className="col-span-1">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Joining Date</label>
+                       <input type="date" required value={form.join_date} onChange={e=>setForm({...form, join_date: e.target.value})}
+                          className="w-full h-11 border-2 rounded-xl px-4 text-sm focus:border-emerald-500 outline-none"/>
+                    </div>
+                    <div className="col-span-1">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Account Password</label>
+                       <input type="password" required minLength={6} value={form.password} onChange={e=>setForm({...form, password: e.target.value})}
+                          placeholder="Min 6 characters"
+                          className="w-full h-11 border-2 rounded-xl px-4 text-sm focus:border-emerald-500 outline-none"/>
+                    </div>
                 </div>
                 
                 <div className="flex justify-end gap-3 pt-4 border-t shrink-0">

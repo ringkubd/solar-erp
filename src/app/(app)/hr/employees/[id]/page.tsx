@@ -206,13 +206,82 @@ export default function EmployeeProfilePage() {
             <div className="bg-white border rounded-[2rem] p-6 shadow-sm">
                <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6">Security & Roles</h3>
                <div className="space-y-4">
-                  <div className="p-4 bg-slate-50 rounded-2xl flex items-center justify-between">
-                     <span className="text-xs font-black uppercase text-slate-600">Access Role</span>
-                     <span className="text-[10px] font-black uppercase bg-white px-3 py-1 border border-slate-200 rounded-lg text-slate-800">{employee.role}</span>
+                  <div className="p-4 bg-slate-50 rounded-2xl">
+                     <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-black uppercase text-slate-600">Access Role</span>
+                        <select 
+                           value={employee.role}
+                           onChange={async (e) => {
+                              try {
+                                 const res = await api.put(`/hr/employees/${id}`, { role: e.target.value });
+                                 setEmployee(res.data);
+                              } catch (err) { console.error(err); }
+                           }}
+                           className="text-[10px] font-black uppercase bg-white px-2 py-1 border border-slate-200 rounded-lg text-slate-800 outline-none focus:border-blue-500"
+                        >
+                           <option value="admin">Admin</option>
+                           <option value="engineer">Engineer</option>
+                           <option value="accountant">Accountant</option>
+                           <option value="staff">Staff</option>
+                        </select>
+                     </div>
                   </div>
+
+                  <div className="p-4 bg-slate-50 rounded-2xl">
+                     <span className="text-xs font-black uppercase text-slate-600 mb-3 block">Guard Permissions</span>
+                     <div className="flex flex-wrap gap-2">
+                        {['admin', 'engineer', 'accountant'].map(r => (
+                           <button 
+                              key={r}
+                              onClick={async () => {
+                                 const currentRoles = employee.roles?.map((role: any) => role.role_name) || [];
+                                 const newRoles = currentRoles.includes(r) 
+                                    ? currentRoles.filter((role: string) => role !== r)
+                                    : [...currentRoles, r];
+                                 try {
+                                    const res = await api.put(`/hr/employees/${id}`, { assigned_roles: newRoles });
+                                    setEmployee(res.data);
+                                 } catch (err) { console.error(err); }
+                              }}
+                              className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-tighter transition-all ${
+                                 employee.roles?.some((role: any) => role.role_name === r)
+                                    ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20'
+                                    : 'bg-white text-slate-400 border border-slate-200 hover:border-blue-200'
+                              }`}
+                           >
+                              {r}
+                           </button>
+                        ))}
+                     </div>
+                  </div>
+
+                  <div className="p-4 bg-red-50/50 border border-red-100 rounded-2xl space-y-3">
+                     <span className="text-xs font-black uppercase text-red-600 block">Restricted Actions</span>
+                     <button 
+                        onClick={async () => {
+                           const newPass = prompt("Enter new password (min 6 chars):");
+                           if (newPass && newPass.length >= 6) {
+                              try {
+                                 await api.put(`/hr/employees/${id}/password`, { password: newPass });
+                                 alert("Password reset successfully.");
+                              } catch (err) { alert("Failed to reset password."); }
+                           }
+                        }}
+                        className="w-full py-2 bg-white text-red-600 border border-red-200 hover:bg-red-600 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm"
+                     >
+                        Reset Password
+                     </button>
+                  </div>
+
                   <div className="p-4 bg-slate-50 rounded-2xl flex items-center justify-between">
                      <span className="text-xs font-black uppercase text-slate-600">User Acc.</span>
-                     <span className="text-[10px] font-black uppercase bg-emerald-50 text-emerald-600 border border-emerald-100 px-3 py-1 rounded-lg">Connected</span>
+                     <span className={`text-[10px] font-black uppercase px-3 py-1 rounded-lg border ${
+                        employee.user_id 
+                           ? 'bg-emerald-50 text-emerald-600 border-emerald-100' 
+                           : 'bg-amber-50 text-amber-600 border-amber-100'
+                     }`}>
+                        {employee.user_id ? 'Connected' : 'Portal Access Off'}
+                     </span>
                   </div>
                </div>
             </div>

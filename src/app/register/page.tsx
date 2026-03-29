@@ -7,40 +7,41 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [guard, setGuard] = useState("web");
   const [formData, setFormData] = useState({
+    company_name: "",
     email: "",
     password: "",
+    password_confirmation: "",
   });
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
+    if (formData.password !== formData.password_confirmation) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
+
     try {
-      // We pass the guard to the backend to help it identify which provider to use
-      const res = await api.post("/auth/login", { ...formData, guard });
+      const res = await api.post("/auth/register", formData);
       const { token, user } = res.data;
       
       if (typeof window !== "undefined") {
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
-        localStorage.setItem("guard", guard);
+        localStorage.setItem("guard", "client");
       }
       
-      // Redirect based on guard
-      const dashboardPath = guard === 'web' ? '/dashboard' : 
-                            guard === 'employee' ? '/employee/dashboard' : 
-                            '/client/dashboard';
-                            
-      router.push(dashboardPath);
+      router.push("/client/dashboard");
     } catch (err: any) {
-      setError(err.response?.data?.message || "Invalid credentials. Please try again.");
+      setError(err.response?.data?.message || "Registration failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -51,36 +52,31 @@ export default function LoginPage() {
       <div className="w-full max-w-md space-y-8 bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800">
         <div className="text-center">
           <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            <span className="text-emerald-600 font-black">SOLAR</span> ERP
+            <span className="text-emerald-600 font-black">SOLAR</span> EPC
           </h2>
-          <p className="mt-2 text-sm text-slate-500 italic">Enterprise Resource Planning System</p>
+          <p className="mt-2 text-sm text-slate-500 italic">Client Onboarding</p>
         </div>
 
-        {/* Guard Selection Tabs */}
-        <div className="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
-          {["web", "employee", "client"].map((g) => (
-            <button
-              key={g}
-              onClick={() => setGuard(g)}
-              className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all ${
-                guard === g 
-                ? "bg-white dark:bg-slate-700 shadow-sm text-emerald-600" 
-                : "text-slate-500 hover:text-slate-700"
-              }`}
-            >
-              {g.charAt(0).toUpperCase() + g.slice(1)}
-            </button>
-          ))}
-        </div>
-
-        <form className="mt-4 space-y-4" onSubmit={handleLogin}>
+        <form className="mt-6 space-y-4" onSubmit={handleRegister}>
           {error && (
-            <div className="p-3 bg-red-50 text-red-600 text-xs rounded-lg border border-red-100 animate-pulse">
+            <div className="p-3 bg-red-50 text-red-600 text-xs rounded-lg border border-red-100 animate-fade-in">
               {error}
             </div>
           )}
           
           <div className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="company_name" className="text-slate-600 dark:text-slate-400 font-medium">Company Name</Label>
+              <Input
+                id="company_name"
+                required
+                className="rounded-xl border-slate-200 focus:ring-emerald-500 focus:border-emerald-500"
+                value={formData.company_name}
+                onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
+                placeholder="Solar Solutions Ltd."
+              />
+            </div>
+
             <div className="space-y-1.5">
               <Label htmlFor="email" className="text-slate-600 dark:text-slate-400 font-medium">Email address</Label>
               <Input
@@ -90,14 +86,11 @@ export default function LoginPage() {
                 className="rounded-xl border-slate-200 focus:ring-emerald-500 focus:border-emerald-500"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder={`e.g. ${guard}@solarepc.com`}
               />
             </div>
             
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-slate-600 dark:text-slate-400 font-medium">Password</Label>
-              </div>
+              <Label htmlFor="password" className="text-slate-600 dark:text-slate-400 font-medium">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -107,22 +100,27 @@ export default function LoginPage() {
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               />
             </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="password_confirmation" className="text-slate-600 dark:text-slate-400 font-medium">Confirm Password</Label>
+              <Input
+                id="password_confirmation"
+                type="password"
+                required
+                className="rounded-xl border-slate-200 focus:ring-emerald-500 focus:border-emerald-500"
+                value={formData.password_confirmation}
+                onChange={(e) => setFormData({ ...formData, password_confirmation: e.target.value })}
+              />
+            </div>
           </div>
 
           <Button type="submit" className="w-full h-11 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-200 dark:shadow-none transition-all transform active:scale-95" disabled={loading}>
-            {loading ? (
-              <span className="flex items-center gap-2">
-                <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
-                Authenticating...
-              </span>
-            ) : "Secure Login"}
+            {loading ? "Creating Account..." : "Register Now"}
           </Button>
           
-          {guard === 'client' && (
-            <p className="text-center text-xs text-slate-500 mt-4">
-              New client? <a href="/register" className="text-emerald-600 font-bold hover:underline">Register here</a>
-            </p>
-          )}
+          <p className="text-center text-xs text-slate-500 mt-4">
+            Already have an account? <a href="/login" className="text-emerald-600 font-bold hover:underline">Login here</a>
+          </p>
         </form>
       </div>
     </div>

@@ -73,13 +73,43 @@ export default function ClientsPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              clients.map((client) => (
+              clients.map((client: any) => (
                 <TableRow key={client.id}>
-                  <TableCell className="font-medium">{client.company_name}</TableCell>
+                  <TableCell className="font-medium">
+                    <div className="flex flex-col">
+                      <span>{client.company_name}</span>
+                      <span className="text-[10px] text-slate-400 font-mono uppercase">{client.email}</span>
+                    </div>
+                  </TableCell>
                   <TableCell>{client.tax_id || "-"}</TableCell>
-                  <TableCell>{client.district || "-"}</TableCell>
                   <TableCell>
-                    <Button variant="outline" size="sm">View</Button>
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                      client.is_active ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'
+                    }`}>
+                      {client.is_active ? 'Active' : 'Suspended'}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Link href={`/crm/clients/${client.id}`}>
+                        <Button variant="outline" size="sm">Edit</Button>
+                      </Link>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                        onClick={async () => {
+                          if (confirm("Are you sure you want to remove this client?")) {
+                            try {
+                              await api.delete(`/clients/${client.id}`);
+                              setClients(prev => prev.filter(c => c.id !== client.id));
+                            } catch (e) { alert("Delete failed"); }
+                          }
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
