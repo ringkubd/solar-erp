@@ -11,12 +11,13 @@ class MoneyReceipt extends Model
 
     protected $fillable = [
         'receipt_no', 'client_id', 'invoice_id', 'recorded_by',
-        'amount', 'payment_method', 'transaction_ref', 'receipt_date', 'notes',
+        'amount', 'discount_amount', 'payment_method', 'transaction_ref', 'receipt_date', 'notes',
     ];
 
     protected $casts = [
-        'receipt_date' => 'date',
-        'amount'       => 'decimal:2',
+        'receipt_date'    => 'date',
+        'amount'          => 'decimal:2',
+        'discount_amount' => 'decimal:2',
     ];
 
     // ---- Relationships ----

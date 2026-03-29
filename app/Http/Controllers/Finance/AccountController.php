@@ -52,9 +52,17 @@ class AccountController extends Controller
     // GET /reports/profit-loss?from=2026-01-01&to=2026-03-31
     public function profitAndLoss(Request $request)
     {
-        $from = $request->get('from', now()->startOfYear()->toDateString());
-        $to   = $request->get('to',   now()->toDateString());
-        return response()->json($this->svc->profitAndLoss($from, $to));
+        return response()->json(
+            $this->svc->profitAndLoss($request->from, $request->to)
+        );
+    }
+
+    // GET /reports/balance-sheet?as_of=2026-03-31
+    public function balanceSheet(Request $request)
+    {
+        return response()->json(
+            $this->svc->balanceSheet($request->as_of)
+        );
     }
 
     // GET /reports/ledger/{account_id}?from=2026-01-01&to=2026-03-31

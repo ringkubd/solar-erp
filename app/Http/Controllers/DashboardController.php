@@ -37,8 +37,8 @@ class DashboardController extends Controller
         // 4. Counts
         return response()->json([
             'counts' => [
-                'total_revenue' => $accounting['kpis']['total_revenue'],
-                'net_profit' => $accounting['kpis']['net_profit'],
+                'total_revenue' => $accounting['kpis']['total_revenue'] ?? 0,
+                'net_profit' => $accounting['kpis']['net_profit'] ?? 0,
                 'active_projects' => Project::whereIn('status', ['planning', 'active'])->count(),
                 'new_leads' => Lead::where('stage', 'new')->count(),
                 'pending_proposals' => Proposal::whereIn('status', ['sent', 'draft'])->count(),
@@ -50,8 +50,8 @@ class DashboardController extends Controller
                 'won' => $leadsByStage['won'] ?? 0,
             ],
             'projects' => $activeProjects,
-            'recent_finance' => $accounting['recent_journals'],
-            'trends' => $accounting['trends']
+            'recent_finance' => $accounting['recent_journals'] ?? [],
+            'trends' => $accounting['trends'] ?? []
         ]);
     }
 }

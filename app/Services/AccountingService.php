@@ -47,6 +47,7 @@ class AccountingService
                 JournalEntry::create([
                     'journal_id' => $journal->id,
                     'account_id' => $line['account_id'],
+                    'project_id' => $line['project_id'] ?? null,
                     'type'       => $line['type'],
                     'amount'     => $line['amount'],
                     'narration'  => $line['narration'] ?? null,
@@ -219,34 +220,91 @@ class AccountingService
 
         $rows = [];
         foreach ($accounts as $acc) {
-            $entries = $acc->journalEntries()
-                ->whereHas('journal', fn($q) => $q->where('is_posted', true)->whereDate('date', '<=', $date))
-                ->get();
-
-            $debits  = $entries->where('type', 'debit')->sum('amount');
-            $credits = $entries->where('type', 'credit')->sum('amount');
-
-            if ($debits == 0 && $credits == 0) continue;  // skip zero-balance accounts
+            $balance = $acc->balance(null, $date);
+            if ($balance == 0) continue;
 
             $rows[] = [
                 'code'       => $acc->code,
                 'name'       => $acc->name,
                 'type'       => $acc->type,
-                'debit'      => $debits,
-                'credit'     => $credits,
-                'balance'    => $acc->normalBalance() === 'debit' ? ($debits - $credits) : ($credits - $debits),
+                'balance'    => $balance,
+                'normal'     => $acc->normalBalance(),
             ];
         }
 
-        // Totals
-        $totalDebit  = collect($rows)->sum('debit');
-        $totalCredit = collect($rows)->sum('credit');
+        return [
+            'as_of' => $date,
+            'rows'  => $rows,
+            'total_debit'  => collect($rows)->where('normal', 'debit')->sum('balance'),
+            'total_credit' => collect($rows)->where('normal', 'credit')->sum('balance'),
+        ];
+    }
+
+    public function balanceSheet(?string $asOf = null): array
+    {
+        $date = $asOf ?? now()->toDateString();
+        $accounts = Account::whereIn('type', ['asset', 'liability', 'equity'])->where('is_active', true)->get();
+
+        $assets = [];
+        $liabilities = [];
+        $equity = [];
+
+        foreach ($accounts as $acc) {
+            $balance = $acc->balance(null, $date);
+            if ($balance == 0) continue;
+
+            $row = ['code' => $acc->code, 'name' => $acc->name, 'amount' => $balance];
+            match($acc->type) {
+                'asset'     => $assets[] = $row,
+                'liability' => $liabilities[] = $row,
+                'equity'    => $equity[] = $row,
+            };
+        }
+
+        // Add Retained Earnings (Net Profit from beginning of time until now)
+        $pnl = $this->profitAndLoss('1970-01-01', $date);
+        $retainedEarnings = $pnl['net_profit'];
+        if ($retainedEarnings != 0) {
+            $equity[] = ['code' => '3900', 'name' => 'Retained Earnings (P&L)', 'amount' => $retainedEarnings];
+        }
 
         return [
-            'as_of'   => $date,
-            'rows'    => $rows,
-            'totals'  => ['debit' => $totalDebit, 'credit' => $totalCredit, 'balanced' => abs($totalDebit - $totalCredit) < 0.01],
+            'as_of' => $date,
+            'assets' => $assets,
+            'liabilities' => $liabilities,
+            'equity' => $equity,
+            'total_assets' => collect($assets)->sum('amount'),
+            'total_liabilities_equity' => collect($liabilities)->sum('amount') + collect($equity)->sum('amount'),
         ];
+    }
+
+    public function journalizePayroll(\App\Models\Payroll $payroll): Journal
+    {
+        $salaryExpense = Account::where('code', '5210')->firstOrFail(); // Salary Expense
+        $cashAccount   = Account::where('code', '1110')->firstOrFail(); // Cash on Hand (or Bank)
+        
+        // Simplified: Debit Salary Expense, Credit Cash
+        // In a real system, it might be Salary Expense -> Payable, then Payable -> Cash
+        
+        return $this->post([
+            'date'        => now()->toDateString(),
+            'description' => "Payroll Payment - {$payroll->employee->full_name} ({$payroll->month}/{$payroll->year})",
+            'source'      => 'expense',
+            'source_id'   => $payroll->id,
+        ], [
+            [
+                'account_id' => $salaryExpense->id,
+                'type'       => 'debit',
+                'amount'     => $payroll->net_salary,
+                'narration'  => "Salary for {$payroll->employee->full_name}",
+            ],
+            [
+                'account_id' => $cashAccount->id,
+                'type'       => 'credit',
+                'amount'     => $payroll->net_salary,
+                'narration'  => "Salary payment processed",
+            ],
+        ]);
     }
 
     public function profitAndLoss(string $from, string $to): array

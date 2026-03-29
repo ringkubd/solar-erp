@@ -47,20 +47,32 @@ class EmployeeController extends Controller
         $validated = $request->validate([
             'department_id'   => 'required|exists:departments,id',
             'designation_id'  => 'nullable|exists:designations,id',
-            'user_id'         => 'nullable|exists:users,id',
             'employee_id'     => 'required|string|unique:employees,employee_id',
             'first_name'      => 'required|string|max:100',
             'last_name'       => 'required|string|max:100',
             'email'           => 'required|email|unique:employees,email',
+            'password'        => 'required|string|min:6',
             'phone'           => 'nullable|string',
             'role'            => 'required|string', 
             'salary'          => 'required|numeric|min:0',
-            'salary_structure' => 'nullable|array',
             'join_date'       => 'required|date',
             'address'         => 'nullable|string',
+            'assigned_roles'  => 'nullable|array'
         ]);
 
-        return response()->json(Employee::create($validated), 201);
+        if (isset($validated['password'])) {
+            $validated['password'] = \Illuminate\Support\Facades\Hash::make($validated['password']);
+        }
+
+        $employee = Employee::create($validated);
+
+        if (isset($validated['assigned_roles'])) {
+            foreach ($validated['assigned_roles'] as $roleName) {
+                $employee->roles()->create(['role_name' => $roleName, 'permissions' => ['*']]);
+            }
+        }
+
+        return response()->json($employee, 201);
     }
 
     // GET /employees/{id}
@@ -74,15 +86,35 @@ class EmployeeController extends Controller
     {
         $employee = Employee::findOrFail($id);
         $validated = $request->validate([
-            'department_id' => 'sometimes|required|exists:departments,id',
-            'first_name'    => 'sometimes|required|string|max:100',
-            'last_name'     => 'sometimes|required|string|max:100',
-            'email'         => "sometimes|required|email|unique:employees,email,{$id}",
-            'status'        => 'sometimes|required|in:active,inactive,on_leave',
-            'salary'        => 'sometimes|required|numeric',
+            'department_id'  => 'sometimes|required|exists:departments,id',
+            'designation_id' => 'sometimes|nullable|exists:designations,id',
+            'first_name'     => 'sometimes|required|string|max:100',
+            'last_name'      => 'sometimes|required|string|max:100',
+            'email'          => "sometimes|required|email|unique:employees,email,{$id}",
+            'status'         => 'sometimes|required|in:active,inactive,on_leave',
+            'salary'         => 'sometimes|required|numeric',
+            'role'           => 'sometimes|required|string',
+            'assigned_roles' => 'nullable|array'
         ]);
 
         $employee->update($validated);
-        return response()->json($employee);
+
+        if ($request->has('assigned_roles')) {
+            $employee->roles()->delete();
+            foreach ($request->assigned_roles as $roleName) {
+                $employee->roles()->create(['role_name' => $roleName, 'permissions' => ['*']]);
+            }
+        }
+
+        return response()->json($employee->load('roles'));
+    }
+
+    public function updatePassword(Request $request, $id)
+    {
+        $employee = Employee::findOrFail($id);
+        $request->validate(['password' => 'required|string|min:6']);
+        
+        $employee->update(['password' => \Illuminate\Support\Facades\Hash::make($request->password)]);
+        return response()->json(['message' => 'Password updated successfully']);
     }
 }

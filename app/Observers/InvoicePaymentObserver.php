@@ -13,7 +13,10 @@ class InvoicePaymentObserver
     private function recalculate(Invoice $invoice): void
     {
         $amountPaid = $invoice->payments()->sum('amount');
-        $balanceDue = max(0, $invoice->total_amount - $amountPaid);
+        $discounts  = $invoice->payments()->sum('discount_amount');
+        $totalReduced = $amountPaid + $discounts;
+        
+        $balanceDue = max(0, $invoice->total_amount - $totalReduced);
         
         $status = $invoice->status;
         if ($balanceDue <= 0) {

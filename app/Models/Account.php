@@ -31,8 +31,7 @@ class Account extends Model
     }
 
     /**
-     * Normal balance: assets & expenses have debit normal balance,
-     * liabilities, equity, income have credit normal balance.
+     * Determine normal balance of account type
      */
     public function normalBalance(): string
     {

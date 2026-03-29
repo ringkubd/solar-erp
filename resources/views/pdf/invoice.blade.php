@@ -136,6 +136,7 @@
                     <th class="text-right">Unit Price</th>
                     <th class="text-right">VAT %</th>
                     <th class="text-right">VAT Amt</th>
+                    <th class="text-right">Disc %</th>
                     <th class="text-right">Total</th>
                 </tr>
             </thead>
@@ -149,6 +150,7 @@
                     <td class="text-right">{{ number_format($item->unit_price, 2) }}</td>
                     <td class="text-right">{{ $item->vat_pct ?? 0 }}%</td>
                     <td class="text-right">{{ number_format($item->vat_amount ?? 0, 2) }}</td>
+                    <td class="text-right">{{ $item->discount_pct ?? 0 }}%</td>
                     <td class="text-right"><strong>{{ number_format($item->total_price, 2) }}</strong></td>
                 </tr>
                 @empty

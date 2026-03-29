@@ -50,11 +50,14 @@ class MoneyReceiptController extends Controller
             'client_id'       => 'required|exists:clients,id',
             'invoice_id'      => 'nullable|exists:invoices,id',
             'amount'          => 'required|numeric|min:0.01',
+            'discount_amount' => 'nullable|numeric|min:0',
             'payment_method'  => 'required|in:cash,bank_transfer,cheque,mobile_banking,other',
             'transaction_ref' => 'nullable|string|max:150',
             'receipt_date'    => 'required|date',
             'notes'           => 'nullable|string',
         ]);
+
+        $validated['discount_amount'] = $validated['discount_amount'] ?? 0;
 
         return DB::transaction(function () use ($validated, $request) {
 
@@ -90,13 +93,14 @@ class MoneyReceiptController extends Controller
             // ── Update Invoice via InvoicePayment ledger ──
             if (!empty($validated['invoice_id'])) {
                 \App\Models\InvoicePayment::create([
-                    'invoice_id'     => $validated['invoice_id'],
-                    'amount'         => $validated['amount'],
-                    'payment_method' => $validated['payment_method'],
-                    'transaction_ref'=> $validated['transaction_ref'] ?? null,
-                    'payment_date'   => $validated['receipt_date'],
-                    'reference_note' => "Auto-linked from Receipt #{$receipt->receipt_no}",
-                    'recorded_by'    => auth()->id(),
+                    'invoice_id'      => $validated['invoice_id'],
+                    'amount'          => $validated['amount'],
+                    'discount_amount' => $validated['discount_amount'],
+                    'payment_method'  => $validated['payment_method'],
+                    'transaction_ref' => $validated['transaction_ref'] ?? null,
+                    'payment_date'    => $validated['receipt_date'],
+                    'reference_note'  => "Auto-linked from Receipt #{$receipt->receipt_no}",
+                    'recorded_by'     => auth()->id(),
                 ]);
             }
 

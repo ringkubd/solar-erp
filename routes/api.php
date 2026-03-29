@@ -2,11 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\MultiGuardAuthController;
 
 Route::prefix('v1')->group(function() {
-    Route::post('/auth/login', [AuthController::class, 'login']);
-    
+    Route::post('/auth/login', [MultiGuardAuthController::class, 'login']);
+    Route::post('/auth/register', [MultiGuardAuthController::class, 'registerClient']);
     
     // Public Web Content
     Route::get('/website/content', [\App\Http\Controllers\PublicContentController::class, 'index']);
@@ -22,7 +22,8 @@ Route::prefix('v1')->group(function() {
     Route::post('/contact', [\App\Http\Controllers\CRM\LeadController::class, 'storePublic']);
 
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('/auth/logout', [AuthController::class, 'logout']);
+        Route::post('/auth/logout', [MultiGuardAuthController::class, 'logout']);
+        Route::get('/auth/me', [MultiGuardAuthController::class, 'me']);
         
         // CMS Module
         Route::apiResource('/cms/products', \App\Http\Controllers\CMS\ProductController::class);
@@ -33,8 +34,6 @@ Route::prefix('v1')->group(function() {
         
         Route::post('/cms/seo', [\App\Http\Controllers\CMS\SeoController::class, 'store']);
         Route::get('/cms/seo', [\App\Http\Controllers\CMS\SeoController::class, 'index']);
-        
-        Route::get('/auth/me', [AuthController::class, 'me']);
         
         // CRM Module
         Route::get('/leads/data/pipeline', [\App\Http\Controllers\CRM\LeadController::class, 'pipeline']);
@@ -112,16 +111,19 @@ Route::prefix('v1')->group(function() {
         Route::get('/projects/{projectId}/invoices', [\App\Http\Controllers\Invoice\InvoiceController::class, 'index']);
         
         // ── Finance & Accounting Module ──
-        Route::get('/receipts/{id}/pdf', [\App\Http\Controllers\Finance\MoneyReceiptController::class, 'pdf']);
-        Route::apiResource('/receipts', \App\Http\Controllers\Finance\MoneyReceiptController::class)->only(['index','store','show','destroy']);
+        Route::middleware(['employee.role:admin,accountant'])->group(function() {
+            Route::get('/receipts/{id}/pdf', [\App\Http\Controllers\Finance\MoneyReceiptController::class, 'pdf']);
+            Route::apiResource('/receipts', \App\Http\Controllers\Finance\MoneyReceiptController::class)->only(['index','store','show','destroy']);
 
-        Route::get('/accounts/flat', [\App\Http\Controllers\Finance\AccountController::class, 'flat']);
-        Route::apiResource('/accounts', \App\Http\Controllers\Finance\AccountController::class);
-        Route::apiResource('/journals', \App\Http\Controllers\Finance\JournalController::class);
-        Route::get('/reports/trial-balance', [\App\Http\Controllers\Finance\AccountController::class, 'trialBalance']);
-        Route::get('/reports/profit-loss', [\App\Http\Controllers\Finance\AccountController::class, 'profitAndLoss']);
-        Route::get('/reports/ledger/{accountId}', [\App\Http\Controllers\Finance\AccountController::class, 'ledger']);
-        Route::get('/reports/dashboard', [\App\Http\Controllers\Finance\AccountController::class, 'dashboard']);
+            Route::get('/accounts/flat', [\App\Http\Controllers\Finance\AccountController::class, 'flat']);
+            Route::apiResource('/accounts', \App\Http\Controllers\Finance\AccountController::class);
+            Route::apiResource('/journals', \App\Http\Controllers\Finance\JournalController::class);
+            Route::get('/reports/trial-balance', [\App\Http\Controllers\Finance\AccountController::class, 'trialBalance']);
+            Route::get('/reports/profit-loss', [\App\Http\Controllers\Finance\AccountController::class, 'profitAndLoss']);
+            Route::get('/reports/balance-sheet', [\App\Http\Controllers\Finance\AccountController::class, 'balanceSheet']);
+            Route::get('/reports/ledger/{accountId}', [\App\Http\Controllers\Finance\AccountController::class, 'ledger']);
+            Route::get('/reports/dashboard', [\App\Http\Controllers\Finance\AccountController::class, 'dashboard']);
+        });
         // ─────────────────────────────────
 
         // Dashboard Stats
@@ -137,6 +139,7 @@ Route::prefix('v1')->group(function() {
         Route::get('/inventory/items/{id}/history', [\App\Http\Controllers\Inventory\InventoryController::class, 'history']);
         Route::apiResource('/inventory/categories', \App\Http\Controllers\Inventory\InventoryCategoryController::class);
         Route::post('/inventory/movements', [\App\Http\Controllers\Inventory\InventoryController::class, 'move']);
+        
         // HR Management
         Route::get('/hr/departments', [App\Http\Controllers\HR\EmployeeController::class, 'departments']);
         Route::get('/hr/designations', [App\Http\Controllers\HR\EmployeeController::class, 'designations']);
@@ -144,6 +147,7 @@ Route::prefix('v1')->group(function() {
         Route::post('/hr/employees', [App\Http\Controllers\HR\EmployeeController::class, 'store']);
         Route::get('/hr/employees/{id}', [App\Http\Controllers\HR\EmployeeController::class, 'show']);
         Route::put('/hr/employees/{id}', [App\Http\Controllers\HR\EmployeeController::class, 'update']);
+        Route::put('/hr/employees/{id}/password', [App\Http\Controllers\HR\EmployeeController::class, 'updatePassword']);
         
         Route::post('/attendance', [App\Http\Controllers\HR\AttendanceController::class, 'store']);
         Route::get('/hr/employees/{id}/attendance', [App\Http\Controllers\HR\AttendanceController::class, 'index']);
@@ -153,5 +157,36 @@ Route::prefix('v1')->group(function() {
         
         Route::post('/payroll', [App\Http\Controllers\HR\PayrollController::class, 'store']);
         Route::get('/hr/employees/{id}/payrolls', [App\Http\Controllers\HR\PayrollController::class, 'index']);
+
+        // Email & Webmail
+        Route::prefix('mail')->group(function () {
+            Route::get('inbox', [\App\Http\Controllers\Email\WebmailController::class, 'inbox']);
+            Route::get('message/{uid}', [\App\Http\Controllers\Email\WebmailController::class, 'show']);
+            Route::post('send', [\App\Http\Controllers\Email\WebmailController::class, 'send']);
+            Route::get('message/{uid}/summarize', [\App\Http\Controllers\Email\WebmailController::class, 'summarize']);
+            Route::post('ai-generate', [\App\Http\Controllers\Email\WebmailController::class, 'generateDraft']);
+        });
+
+        Route::prefix('email')->group(function () {
+            Route::get('accounts', [\App\Http\Controllers\Email\EmailAccountController::class, 'index']);
+            Route::get('accounts/{id}', [\App\Http\Controllers\Email\EmailAccountController::class, 'show']);
+            Route::put('accounts/{id}', [\App\Http\Controllers\Email\EmailAccountController::class, 'update']);
+            Route::post('sync', [\App\Http\Controllers\Email\EmailAccountController::class, 'sync']);
+        });
+    });
+
+    // Employee Portal Routes
+    Route::middleware(['auth:sanctum', 'guard:employee'])->prefix('employee')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\HR\EmployeePortalController::class, 'dashboard']);
+        Route::get('/tasks', [\App\Http\Controllers\HR\EmployeePortalController::class, 'myTasks']);
+        Route::get('/attendance', [\App\Http\Controllers\HR\EmployeePortalController::class, 'myAttendance']);
+        Route::get('/timesheets', [\App\Http\Controllers\HR\EmployeePortalController::class, 'myTimesheets']);
+    });
+
+    // Client Portal Routes
+    Route::middleware(['auth:sanctum', 'guard:client'])->prefix('client')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\CRM\ClientPortalController::class, 'dashboard']);
+        Route::get('/invoices', [\App\Http\Controllers\CRM\ClientPortalController::class, 'invoices']);
+        Route::get('/projects/{id}', [\App\Http\Controllers\CRM\ClientPortalController::class, 'projectDetails']);
     });
 });
