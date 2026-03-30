@@ -6,6 +6,7 @@ import Link from "next/link";
 import api from "@/lib/api";
 
 import { useAuth } from "@/lib/useAuth";
+import "@/lib/echo"; // Import to initialize Echo globally
 
 export default function AppLayout({
   children,
@@ -92,6 +93,7 @@ export default function AppLayout({
 
         {/* CMS SECTION */}
         <div className="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">System</div>
+        <Link href="/admin/mail-accounts" className="block px-3 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 border border-transparent hover:border-emerald-500/20">Email Accounts</Link>
         <Link href="/cms" className="block px-3 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 border border-transparent hover:border-emerald-500/20">Website CMS</Link>
       </>
     );
