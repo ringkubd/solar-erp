@@ -30,7 +30,7 @@ class FluxWebhookController extends Controller
         $status = $payload['status'] ?? null;
 
         if ($jobId) {
-            $account = EmailAccount::where('provisioning_job_id', $jobId)->first();
+            $account = EmailAccount::where('provision_job_id', $jobId)->first();
             
             if ($account) {
                 if ($status === 'completed') {

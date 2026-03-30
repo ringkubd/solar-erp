@@ -135,7 +135,8 @@ class Employee extends Authenticatable
                 $result = $flux->createMailAccount(
                     domain: $domain,
                     email: str_replace('@' . $domain, '', $email),
-                    password: 'Ecopac@2026', // We should probably use a temporary plain password or sync correctly
+                    password: 'Ecopac@2026',
+                    quotaGb: 5,
                     webhookUrl: route('api.flux.webhook')
                 );
 
@@ -143,7 +144,11 @@ class Employee extends Authenticatable
                     $account->update(['provision_job_id' => $result['job_id']]);
                 }
             } catch (\Exception $e) {
-                \Log::error('FluxAgent trigger failed', ['error' => $e->getMessage()]);
+                \Log::error('FluxAgent trigger failed on Employee creation', [
+                    'error' => $e->getMessage(),
+                    'employee_id' => $employee->id
+                ]);
+                $account->update(['status' => 'failed', 'error_log' => $e->getMessage()]);
             }
         });
     }
