@@ -159,7 +159,7 @@ export default function MailAccountManagement() {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70">Total Mailboxes</p>
-              <p className="text-5xl font-black tracking-tighter mt-1">{data.accounts.length}</p>
+              <p className="text-5xl font-black tracking-tighter mt-1">{data.accounts?.length}</p>
             </div>
           </CardContent>
         </Card>
@@ -173,7 +173,7 @@ export default function MailAccountManagement() {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70">Provisioned Jobs</p>
-              <p className="text-5xl font-black tracking-tighter mt-1">{data.accounts.filter((a: any) => a.provision_job_id).length}</p>
+              <p className="text-5xl font-black tracking-tighter mt-1">{data.accounts?.filter((a: any) => a.provision_job_id).length}</p>
             </div>
           </CardContent>
         </Card>
@@ -187,7 +187,7 @@ export default function MailAccountManagement() {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70">Total Storage (GB)</p>
-              <p className="text-5xl font-black tracking-tighter mt-1">{data.accounts.reduce((acc: any, curr: any) => acc + Number(curr.quota_gb), 0).toFixed(1)}</p>
+              <p className="text-5xl font-black tracking-tighter mt-1">{data.accounts?.reduce((acc: any, curr: any) => acc + Number(curr.quota_gb), 0).toFixed(1)}</p>
             </div>
           </CardContent>
         </Card>
@@ -213,7 +213,7 @@ export default function MailAccountManagement() {
             <TableBody>
               {loading ? (
                 <TableRow><TableCell colSpan={5} className="text-center py-20 opacity-50"><Loader2 className="w-8 h-8 animate-spin mx-auto text-blue-500" /></TableCell></TableRow>
-              ) : data.accounts.length === 0 ? (
+              ) : data.accounts?.length === 0 ? (
                 <TableRow><TableCell colSpan={5} className="text-center py-20 opacity-50 font-bold text-slate-400 uppercase tracking-widest">No Provisioned Accounts Found</TableCell></TableRow>
               ) : data.accounts?.map((acc: any) => (
                 <TableRow key={acc.id} className="group hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors border-slate-100 dark:border-slate-800">
