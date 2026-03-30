@@ -240,9 +240,19 @@ export default function MailAccountManagement() {
                     </div>
                   </TableCell>
                   <TableCell className="px-8 py-6 text-center">
-                    <span className={`px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.1em] border-2 shadow-sm ${acc.is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100'}`}>
-                      {acc.is_active ? 'Online' : 'Restricted'}
-                    </span>
+                    {acc.status === 'provisioning' ? (
+                      <span className="px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.1em] border-2 shadow-sm bg-blue-50 text-blue-600 border-blue-100 flex items-center justify-center gap-1">
+                        <Loader2 className="w-3 h-3 animate-spin" /> Provisioning
+                      </span>
+                    ) : acc.status === 'failed' ? (
+                      <span className="px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.1em] border-2 shadow-sm bg-red-50 text-red-600 border-red-100">
+                        Failed
+                      </span>
+                    ) : (
+                      <span className={`px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.1em] border-2 shadow-sm ${acc.is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100'}`}>
+                        {acc.is_active ? 'Online' : 'Restricted'}
+                      </span>
+                    )}
                   </TableCell>
                   <TableCell className="px-8 py-6 text-right">
                     <div className="flex justify-end gap-2">
