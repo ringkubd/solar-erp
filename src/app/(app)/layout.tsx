@@ -87,6 +87,8 @@ export default function AppLayout({
         <Link href="/invoices" className="block px-3 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Invoices</Link>
         <Link href="/receipts" className="block px-3 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Money Receipts</Link>
         <Link href="/hr/employees" className="block px-3 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Employees (HR)</Link>
+        <Link href="/hr/attendance" className="block px-3 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Attendance Tracker</Link>
+        <Link href="/hr/payroll" className="block px-3 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Salary & Payroll</Link>
         <Link href="/reports/hub" className="block px-3 py-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">Financial Reports</Link>
         <Link href="/accounting" className="block px-3 py-2 mt-2 text-sm font-bold rounded-md text-emerald-700 bg-emerald-50 dark:bg-emerald-950/30">Accounting Hub</Link>
         <Link href="/mail" className="block px-3 py-2 mt-2 text-sm font-bold rounded-md text-blue-700 bg-blue-50 dark:bg-blue-950/30">Company Webmail</Link>

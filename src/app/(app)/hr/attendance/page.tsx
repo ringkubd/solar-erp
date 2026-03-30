@@ -75,9 +75,9 @@ export default function AttendancePage() {
            />
            <button 
               onClick={submitAttendance} disabled={saving}
-              className="px-10 py-3 bg-slate-900 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest shadow-xl hover:bg-slate-800 transition-all active:scale-95 disabled:opacity-50"
+              className="px-10 py-3 bg-slate-900 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest shadow-xl hover:bg-blue-600 transition-all active:scale-95 disabled:opacity-50"
            >
-              {saving ? 'Processing...' : 'Sync Attendance'}
+              {saving ? 'Processing...' : 'Commit Daily Attendance'}
            </button>
         </div>
       </div>

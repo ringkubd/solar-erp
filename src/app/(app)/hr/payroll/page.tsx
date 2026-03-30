@@ -20,11 +20,15 @@ export default function PayrollPage() {
 
   const [payrolls, setPayrolls] = useState<any[]>([]);
 
-  const fetchHR = async () => {
+  const fetchMonthlyData = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/hr/employees');
-      setEmployees(res.data.data);
+      const [empRes, payrollRes] = await Promise.all([
+        api.get('/hr/employees'),
+        api.get('/payroll', { params: { month: run.month, year: run.year } })
+      ]);
+      setEmployees(empRes.data.data);
+      setPayrolls(payrollRes.data);
     } catch (e) {
       console.error(e);
     } finally {
@@ -32,7 +36,7 @@ export default function PayrollPage() {
     }
   };
 
-  useEffect(() => { fetchHR(); }, []);
+  useEffect(() => { fetchMonthlyData(); }, [run.month, run.year]);
 
   const runPayroll = async (empId: number) => {
     setProcessing(true);
@@ -41,14 +45,42 @@ export default function PayrollPage() {
         employee_id: empId,
         ...run
       });
-      alert("Payroll processed and ledger entry created!");
-      fetchHR(); // Refresh to show status
+      fetchMonthlyData();
     } catch (err: any) {
       alert(err.response?.data?.message || "Failed to process payroll.");
     } finally {
       setProcessing(false);
     }
   };
+
+  const bulkProcess = async () => {
+    if (!confirm(`Process payroll for ALL employees for ${run.month}/${run.year}?`)) return;
+    setProcessing(true);
+    try {
+      const res = await api.post('/payroll/bulk', run);
+      alert(`Successfully processed ${res.data.count} payrolls.`);
+      fetchMonthlyData();
+    } catch (err: any) {
+      alert("Failed to run bulk payroll.");
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const markPaid = async (payrollId: number) => {
+    if (!confirm("Confirm salary disbursement? This will record a cash/bank transaction.")) return;
+    setProcessing(true);
+    try {
+      await api.post(`/payroll/${payrollId}/pay`);
+      fetchMonthlyData();
+    } catch (err: any) {
+      alert("Disbursement failed.");
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const totalExp = payrolls.reduce((sum, p) => sum + parseFloat(p.net_salary), 0);
 
   return (
     <div className="space-y-8">
@@ -70,9 +102,12 @@ export default function PayrollPage() {
                  {[2024, 2025, 2026].map(y=>(<option key={y} value={y}>{y}</option>))}
               </select>
            </div>
-           <button className="px-8 py-3 bg-amber-500 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest shadow-xl shadow-amber-500/20 hover:bg-amber-600 transition-all active:scale-95">
-              Bulk Process All
-           </button>
+            <button 
+              disabled={processing}
+              onClick={bulkProcess}
+              className="px-8 py-3 bg-amber-500 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest shadow-xl shadow-amber-500/20 hover:bg-amber-600 transition-all active:scale-95 disabled:opacity-50">
+              {processing ? "Processing..." : "Bulk Process All"}
+            </button>
         </div>
       </div>
 
@@ -107,15 +142,30 @@ export default function PayrollPage() {
                               <div className="text-[9px] font-black text-slate-300 uppercase">Monthly Fixed</div>
                            </td>
                            <td className="px-8 py-6 text-center">
-                              <span className="px-3 py-1 bg-slate-100 text-slate-400 rounded-lg text-[10px] font-black uppercase tracking-widest">Unprocessed</span>
+                              {(() => {
+                                 const p = payrolls.find(x => x.employee_id === emp.id);
+                                 if (!p) return <span className="px-3 py-1 bg-slate-100 text-slate-400 rounded-lg text-[10px] font-black uppercase tracking-widest">Unprocessed</span>;
+                                 if (p.status === 'paid') return <span className="px-3 py-1 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-lg text-[10px] font-black uppercase tracking-widest">Paid</span>;
+                                 return <span className="px-3 py-1 bg-blue-50 text-blue-600 border border-blue-100 rounded-lg text-[10px] font-black uppercase tracking-widest">Processed</span>;
+                              })()}
                            </td>
                            <td className="px-8 py-6 text-right">
-                              <button 
-                                 onClick={() => runPayroll(emp.id)}
-                                 className="px-6 py-2 bg-slate-900 text-white font-black rounded-xl text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all active:scale-95 flex items-center gap-2 ml-auto"
-                              >
-                                 <Calculator className="w-3.5 h-3.5"/> Process
-                              </button>
+                              {(() => {
+                                 const p = payrolls.find(x => x.employee_id === emp.id);
+                                 if (!p) return (
+                                    <button onClick={() => runPayroll(emp.id)} disabled={processing}
+                                       className="px-6 py-2 bg-slate-900 text-white font-black rounded-xl text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all active:scale-95 flex items-center gap-2 ml-auto disabled:opacity-50">
+                                       <Calculator className="w-3.5 h-3.5"/> Process
+                                    </button>
+                                 );
+                                 if (p.status === 'processed') return (
+                                    <button onClick={() => markPaid(p.id)} disabled={processing}
+                                       className="px-6 py-2 bg-emerald-600 text-white font-black rounded-xl text-[10px] uppercase tracking-widest hover:bg-emerald-700 transition-all active:scale-95 flex items-center gap-2 ml-auto disabled:opacity-50">
+                                       <DollarSign className="w-3.5 h-3.5"/> Disburse
+                                    </button>
+                                 );
+                                 return <div className="text-[10px] font-black text-slate-400 uppercase">Settled</div>;
+                              })()}
                            </td>
                         </tr>
                      ))}
@@ -133,7 +183,7 @@ export default function PayrollPage() {
                 <div className="space-y-6">
                    <div>
                       <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Total Expenditure</div>
-                      <div className="text-3xl font-black font-mono tracking-tighter">0.00 BDT</div>
+                      <div className="text-3xl font-black font-mono tracking-tighter">{totalExp.toLocaleString()} BDT</div>
                    </div>
                    <div className="pt-6 border-t border-white/5 space-y-4">
                       <div className="flex items-center justify-between">
