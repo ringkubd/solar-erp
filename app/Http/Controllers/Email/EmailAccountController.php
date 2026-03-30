@@ -12,7 +12,33 @@ class EmailAccountController extends Controller
 {
     public function index()
     {
-        return response()->json(EmailAccount::with('employee')->paginate(20));
+        return response()->json([
+            'accounts' => EmailAccount::with('employee')->get(),
+            'unassigned_employees' => Employee::whereDoesntHave('emailAccount')->get()
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'employee_id' => 'required|exists:employees,id',
+            'email'       => 'required|email|unique:email_accounts,email',
+            'password'    => 'required|string|min:6',
+            'quota_gb'    => 'required|numeric|min:0.1'
+        ]);
+
+        $domain = 'ecopacpowertech.com';
+        
+        $account = EmailAccount::create([
+            'employee_id'   => $validated['employee_id'],
+            'email'         => $validated['email'],
+            'password_hash' => Hash::make($validated['password']),
+            'mailbox_path'  => "/var/mail/vhosts/{$domain}/" . str_replace('@' . $domain, '', $validated['email']),
+            'quota_gb'      => $validated['quota_gb'],
+            'is_active'     => true
+        ]);
+
+        return response()->json($account, 201);
     }
 
     public function show($id)
@@ -62,5 +88,12 @@ class EmailAccountController extends Controller
         }
 
         return response()->json(['message' => "Synced $count email accounts."]);
+    }
+
+    public function destroy($id)
+    {
+        $account = EmailAccount::findOrFail($id);
+        $account->delete();
+        return response()->json(['message' => 'Email account deleted.']);
     }
 }

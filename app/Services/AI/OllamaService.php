@@ -46,7 +46,11 @@ class OllamaService
      */
     public function composeEmail($instruction)
     {
-        $prompt = "Write a professional business email based on these instructions: $instruction\n\nEmail:";
+        $prompt = "Write a professional business email based on these instructions: $instruction\n\n" .
+                  "Please provide the output in the following format:\n" .
+                  "Subject: [Your Subject Here]\n" .
+                  "Body: [Your Email Body Here]\n\n" .
+                  "Response:";
         return $this->generate($prompt);
     }
 }

@@ -169,8 +169,10 @@ Route::prefix('v1')->group(function() {
 
         Route::prefix('email')->group(function () {
             Route::get('accounts', [\App\Http\Controllers\Email\EmailAccountController::class, 'index']);
+            Route::post('accounts', [\App\Http\Controllers\Email\EmailAccountController::class, 'store']);
             Route::get('accounts/{id}', [\App\Http\Controllers\Email\EmailAccountController::class, 'show']);
             Route::put('accounts/{id}', [\App\Http\Controllers\Email\EmailAccountController::class, 'update']);
+            Route::delete('accounts/{id}', [\App\Http\Controllers\Email\EmailAccountController::class, 'destroy']);
             Route::post('sync', [\App\Http\Controllers\Email\EmailAccountController::class, 'sync']);
         });
 
