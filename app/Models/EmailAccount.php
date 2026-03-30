@@ -13,7 +13,10 @@ class EmailAccount extends Model
         'mailbox_path',
         'quota_gb',
         'is_active',
-        'last_login_at'
+        'last_login_at',
+        'status',
+        'provision_job_id',
+        'error_log'
     ];
 
     protected $casts = [

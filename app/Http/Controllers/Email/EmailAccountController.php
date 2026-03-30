@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Hash;
 
 class EmailAccountController extends Controller
 {
+    protected $flux;
+
+    public function __construct(\App\Services\FluxAgentService $flux)
+    {
+        $this->flux = $flux;
+    }
     public function index()
     {
         return response()->json([
@@ -35,10 +41,24 @@ class EmailAccountController extends Controller
             'password_hash' => Hash::make($validated['password']),
             'mailbox_path'  => "/var/mail/vhosts/{$domain}/" . str_replace('@' . $domain, '', $validated['email']),
             'quota_gb'      => $validated['quota_gb'],
-            'is_active'     => true
+            'is_active'     => true,
+            'status'        => 'provisioning'
         ]);
 
-        return response()->json($account, 201);
+        // Trigger Flux Agent
+        $result = $this->flux->createMailAccount(
+            domain: $domain,
+            email: str_replace('@' . $domain, '', $validated['email']),
+            password: $validated['password'],
+            quotaGb: (int) $validated['quota_gb'],
+            webhookUrl: route('api.flux.webhook')
+        );
+
+        if (isset($result['job_id'])) {
+            $account->update(['provision_job_id' => $result['job_id']]);
+        }
+
+        return response()->json($account->load('employee'), 201);
     }
 
     public function show($id)
@@ -57,6 +77,14 @@ class EmailAccountController extends Controller
 
         if (isset($validated['password'])) {
             $validated['password_hash'] = Hash::make($validated['password']);
+            
+            // Trigger Password Reset on Agent
+            $this->flux->resetPassword(
+                domain: 'ecopacpowertech.com',
+                email: $account->email,
+                password: $validated['password']
+            );
+
             unset($validated['password']);
         }
 
@@ -78,12 +106,27 @@ class EmailAccountController extends Controller
                 $email = strtolower($employee->first_name . '.' . $employee->last_name . $employee->id) . '@' . $domain;
             }
 
-            $employee->emailAccount()->create([
+            $account = $employee->emailAccount()->create([
                 'email'         => $email,
                 'password_hash' => $employee->password ?? Hash::make('Ecopac@2026'),
                 'mailbox_path'  => "/var/mail/vhosts/{$domain}/" . str_replace('@' . $domain, '', $email),
                 'quota_gb'      => 5.00,
+                'status'        => 'provisioning'
             ]);
+
+            // Trigger Flux Agent
+            $result = $this->flux->createMailAccount(
+                domain: $domain,
+                email: str_replace('@' . $domain, '', $email),
+                password: 'Ecopac@2026', // Fallback password for sync
+                quotaGb: 5,
+                webhookUrl: route('api.flux.webhook')
+            );
+
+            if (isset($result['job_id'])) {
+                $account->update(['provision_job_id' => $result['job_id']]);
+            }
+
             $count++;
         }
 
@@ -93,6 +136,12 @@ class EmailAccountController extends Controller
     public function destroy($id)
     {
         $account = EmailAccount::findOrFail($id);
+        
+        // Trigger Delete on Agent
+        $domain = 'ecopacpowertech.com';
+        $emailPrefix = str_replace('@' . $domain, '', $account->email);
+        $this->flux->deleteMailAccount($domain, $emailPrefix);
+
         $account->delete();
         return response()->json(['message' => 'Email account deleted.']);
     }

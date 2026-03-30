@@ -23,18 +23,19 @@ class FluxAgentService
     /**
      * Create mail account (async job).
      */
-    public function createMailAccount(string $domain, string $email, string $password, ?string $webhookUrl = null)
+    public function createMailAccount(string $domain, string $email, string $password, ?int $quotaGb = 5, ?string $webhookUrl = null)
     {
         try {
             $response = Http::withHeaders([
-                'X-Flux-API-Key' => $this->apiKey,
+                'x-api-key' => $this->apiKey,
                 'Accept' => 'application/json'
             ])
             ->timeout($this->timeout)
-            ->post("{$this->baseUrl}/api/v1/mail/create", [
+            ->post("{$this->baseUrl}/mail/create", [
                 'domain'      => $domain,
                 'email'       => $email,
                 'password'    => $password,
+                'quota'       => $quotaGb,
                 'webhook_url' => $webhookUrl
             ]);
 
@@ -59,17 +60,62 @@ class FluxAgentService
     }
 
     /**
+     * Reset mail account password (async job).
+     */
+    public function resetPassword(string $domain, string $email, string $password)
+    {
+        try {
+            $response = Http::withHeaders([
+                'x-api-key' => $this->apiKey,
+                'Accept'    => 'application/json'
+            ])
+            ->timeout($this->timeout)
+            ->post("{$this->baseUrl}/mail/reset-password", [
+                'domain'   => $domain,
+                'email'    => $email,
+                'password' => $password,
+            ]);
+
+            return $response->json();
+        } catch (\Exception $e) {
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Delete mail account (async job).
+     */
+    public function deleteMailAccount(string $domain, string $email)
+    {
+        try {
+            $response = Http::withHeaders([
+                'x-api-key' => $this->apiKey,
+                'Accept'    => 'application/json'
+            ])
+            ->timeout($this->timeout)
+            ->delete("{$this->baseUrl}/mail/delete", [
+                'domain' => $domain,
+                'email'  => $email,
+            ]);
+
+            return $response->json();
+        } catch (\Exception $e) {
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
+
+    /**
      * Get status of a job.
      */
     public function getJobStatus(string $jobId)
     {
         try {
             $response = Http::withHeaders([
-                'X-Flux-API-Key' => $this->apiKey,
-                'Accept' => 'application/json'
+                'x-api-key' => $this->apiKey,
+                'Accept'    => 'application/json'
             ])
             ->timeout($this->timeout)
-            ->get("{$this->baseUrl}/api/v1/jobs/{$jobId}");
+            ->get("{$this->baseUrl}/job/{$jobId}");
 
             return $response->json();
         } catch (\Exception $e) {
@@ -83,7 +129,7 @@ class FluxAgentService
     public static function verifyWebhookSignature(string $payload, string $signature): bool
     {
         $secret = config('flux-agent.webhook_secret');
-        if (empty($secret)) return true; // Security risk, but fallback for now
+        if (empty($secret)) return true;
 
         $computedSignature = hash_hmac('sha256', $payload, $secret);
         return hash_equals($computedSignature, $signature);
