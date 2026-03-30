@@ -89,6 +89,48 @@ class HRService
     }
 
     /**
+     * Generate payroll for all active employees.
+     */
+    public function bulkGeneratePayroll(int $month, int $year): array
+    {
+        $employees = Employee::where('is_active', true)->get();
+        $count = 0;
+        $errors = [];
+
+        foreach ($employees as $employee) {
+            try {
+                $this->generatePayroll($employee->id, $month, $year);
+                $count++;
+            } catch (\Exception $e) {
+                $errors[] = "Employee {$employee->id}: {$e->getMessage()}";
+            }
+        }
+
+        return ['count' => $count, 'errors' => $errors];
+    }
+
+    /**
+     * Mark a payroll as paid and trigger the payment journal.
+     */
+    public function markPayrollAsPaid(int $payrollId): Payroll
+    {
+        return DB::transaction(function () use ($payrollId) {
+            $payroll = Payroll::findOrFail($payrollId);
+            
+            if ($payroll->status === 'paid') {
+                throw new \Exception("Payroll is already marked as paid.");
+            }
+
+            $payroll->update(['status' => 'paid']);
+
+            // Accounting Integration for Payment
+            $this->accountingService->journalizePayroll($payroll);
+
+            return $payroll;
+        });
+    }
+
+    /**
      * Create accounting journal for salary expense.
      */
     private function journalizeSalary(Payroll $payroll): void

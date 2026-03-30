@@ -280,29 +280,26 @@ class AccountingService
 
     public function journalizePayroll(\App\Models\Payroll $payroll): Journal
     {
-        $salaryExpense = Account::where('code', '5210')->firstOrFail(); // Salary Expense
-        $cashAccount   = Account::where('code', '1110')->firstOrFail(); // Cash on Hand (or Bank)
-        
-        // Simplified: Debit Salary Expense, Credit Cash
-        // In a real system, it might be Salary Expense -> Payable, then Payable -> Cash
+        $payableAcc  = Account::where('code', '2110')->firstOrFail(); // Salary Payable
+        $cashAccount = Account::where('code', '1110')->firstOrFail(); // Cash on Hand (or Bank)
         
         return $this->post([
             'date'        => now()->toDateString(),
-            'description' => "Payroll Payment - {$payroll->employee->full_name} ({$payroll->month}/{$payroll->year})",
-            'source'      => 'expense',
+            'description' => "Salary Disbursement - {$payroll->employee->full_name} ({$payroll->month}/{$payroll->year})",
+            'source'      => 'payroll',
             'source_id'   => $payroll->id,
         ], [
             [
-                'account_id' => $salaryExpense->id,
+                'account_id' => $payableAcc->id,
                 'type'       => 'debit',
                 'amount'     => $payroll->net_salary,
-                'narration'  => "Salary for {$payroll->employee->full_name}",
+                'narration'  => "Disbursement for {$payroll->employee->full_name}",
             ],
             [
                 'account_id' => $cashAccount->id,
                 'type'       => 'credit',
                 'amount'     => $payroll->net_salary,
-                'narration'  => "Salary payment processed",
+                'narration'  => "Cash/Bank payment",
             ],
         ]);
     }

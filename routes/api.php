@@ -155,8 +155,14 @@ Route::prefix('v1')->group(function() {
         Route::post('/timesheet', [App\Http\Controllers\HR\TimesheetController::class, 'store']);
         Route::get('/hr/employees/{id}/timesheets', [App\Http\Controllers\HR\TimesheetController::class, 'index']);
         
+        Route::post('/payroll/bulk', [App\Http\Controllers\HR\PayrollController::class, 'bulkStore']);
+        Route::post('/payroll/{id}/pay', [App\Http\Controllers\HR\PayrollController::class, 'pay']);
         Route::post('/payroll', [App\Http\Controllers\HR\PayrollController::class, 'store']);
-        Route::get('/hr/employees/{id}/payrolls', [App\Http\Controllers\HR\PayrollController::class, 'index']);
+        Route::get('/payroll', [App\Http\Controllers\HR\PayrollController::class, 'index']);
+
+        Route::get('/hr/employees/{id}/documents', [App\Http\Controllers\HR\EmployeeDocumentController::class, 'index']);
+        Route::post('/hr/employees/{id}/documents', [App\Http\Controllers\HR\EmployeeDocumentController::class, 'store']);
+        Route::delete('/hr/documents/{id}', [App\Http\Controllers\HR\EmployeeDocumentController::class, 'destroy']);
 
         // Email & Webmail
         Route::prefix('mail')->group(function () {
@@ -196,3 +202,4 @@ Route::prefix('v1')->group(function() {
         Route::get('/projects/{id}', [\App\Http\Controllers\CRM\ClientPortalController::class, 'projectDetails']);
     });
 });
+

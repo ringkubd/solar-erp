@@ -27,6 +27,11 @@ class Employee extends Authenticatable
 
     protected $appends = ['full_name', 'profile_completeness'];
 
+    public function documents()
+    {
+        return $this->hasMany(EmployeeDocument::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -55,11 +60,6 @@ class Employee extends Authenticatable
     public function payrolls()
     {
         return $this->hasMany(Payroll::class);
-    }
-
-    public function documents()
-    {
-        return $this->hasMany(EmployeeDocument::class);
     }
 
     public function roles()

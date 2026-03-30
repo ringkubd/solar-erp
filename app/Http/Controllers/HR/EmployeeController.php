@@ -86,14 +86,19 @@ class EmployeeController extends Controller
     {
         $employee = Employee::findOrFail($id);
         $validated = $request->validate([
-            'department_id'  => 'sometimes|required|exists:departments,id',
-            'designation_id' => 'sometimes|nullable|exists:designations,id',
             'first_name'     => 'sometimes|required|string|max:100',
             'last_name'      => 'sometimes|required|string|max:100',
             'email'          => "sometimes|required|email|unique:employees,email,{$id}",
-            'status'         => 'sometimes|required|in:active,inactive,on_leave',
-            'salary'         => 'sometimes|required|numeric',
+            'phone'          => 'nullable|string',
+            'employee_id'    => "sometimes|required|string|unique:employees,employee_id,{$id}",
+            'department_id'  => 'sometimes|required|exists:departments,id',
+            'designation_id' => 'sometimes|nullable|exists:designations,id',
+            'join_date'      => 'sometimes|required|date',
             'role'           => 'sometimes|required|string',
+            'salary'         => 'sometimes|required|numeric|min:0',
+            'status'         => 'sometimes|required|in:active,inactive,on_leave',
+            'is_active'      => 'sometimes|boolean',
+            'address'        => 'nullable|string',
             'assigned_roles' => 'nullable|array'
         ]);
 
